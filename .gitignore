@@ -1,0 +1,29 @@
+# IDE files
+.idea/
+.vscode/
+*.iml
+.project
+.classpath
+.settings/
+
+# Dependencies
+**/node_modules/
+**/target/
+**/venv/
+**/__pycache__/
+
+# Environment
+.env
+**/application.properties
+!**/application.properties.example
+
+# Build
+**/dist/
+**/build/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
