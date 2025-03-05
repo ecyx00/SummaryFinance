@@ -4,16 +4,13 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class NewsDTO {
-    private Long id;
+public class NewsFromAgentDTO {
+    private String externalId;
     private String title;
     private String content;
     private String category;
+    private String categoryType;
     private String sourceUrl;
-    private String sourceName;
+    private String thumbnail;
     private LocalDateTime publishedDate;
-    private String summary;
-    private Double sentimentScore;
-    private String keyPoints;
-    private String mainTopics;
-}
+} 
