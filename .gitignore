@@ -1,0 +1,37 @@
+# Build output
+target/
+build/
+!**/src/main/**/target/
+!**/src/test/**/target/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# IDE dosyaları
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+.idea
+*.iws
+*.iml
+*.ipr
+.vscode/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/nbproject/genfiles.properties
+/.nb-gradle/
+
+# Maven Wrapper
+!.mvn/wrapper/maven-wrapper.jar
+
+# Uygulama konfigürasyonları
+src/main/resources/application.properties
+.env
+
