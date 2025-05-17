@@ -1,0 +1,58 @@
+# application.properties.example
+
+# --- Veritabanı Ayarları ---
+spring.datasource.url=jdbc:postgresql://localhost:5432/your_db_name
+spring.datasource.username=your_db_user
+spring.datasource.password=your_db_password
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+
+# --- JPA Ayarları ---
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+
+# --- AI Servisi Ayarları ---
+ai.service.url=http://localhost:8000
+
+# --- API Anahtarları ---
+nytimes.api.key=your_nytimes_api_key
+guardian.api.key=your_guardian_api_key
+
+# --- Server Ayarları ---
+server.port=8888
+
+# --- Log Ayarları ---
+logging.level.org.springframework.web=INFO
+logging.level.com.example.summaryfinance=INFO
+logging.file.name=logs/summaryfinance.log
+logging.file.max-size=10MB
+logging.file.max-history=30
+
+# --- Zamanlayıcı Ayarları ---
+# Her gün sabah 5'te çalıştır (saniye dakika saat gün ay haftanın_günü)
+news.fetch.cron=0 0 5 * * ?
+
+# --- NYTimes İçin Çekilecek Konu Başlıkları (Anahtarlar) ---
+nytimes.fetch.keys=NYT_BUSINESS,NYT_POLITICS,NYT_TECHNOLOGY,NYT_SCIENCE,NYT_CLIMATE
+
+# --- NYTimes Filtre Tanımları ---
+nytimes.filter.NYT_BUSINESS=desk:"Business" OR section_name:"Business"
+nytimes.filter.NYT_POLITICS=desk:"Politics" OR section_name:"Politics"
+nytimes.filter.NYT_TECHNOLOGY=desk:"Technology" OR section_name:"Technology"
+nytimes.filter.NYT_SCIENCE=desk:"Science" OR section_name:"Science"
+nytimes.filter.NYT_CLIMATE=desk:"Climate" OR section_name:"Climate"
+
+# --- Guardian İçin Çekilecek Konu Başlıkları (Anahtarlar) ---
+guardian.fetch.keys=GUARDIAN_BUSINESS,GUARDIAN_MONEY,GUARDIAN_POLITICS,GUARDIAN_TECHNOLOGY,GUARDIAN_ENVIRONMENT
+
+# --- Guardian Filtre Tanımları ---
+guardian.filter.GUARDIAN_BUSINESS=section=business
+guardian.filter.GUARDIAN_MONEY=section=money
+guardian.filter.GUARDIAN_POLITICS=section=politics
+guardian.filter.GUARDIAN_TECHNOLOGY=section=technology
+guardian.filter.GUARDIAN_ENVIRONMENT=section=environment
+
+# --- Genel Çekim Ayarları ---
+app.nytimes.enabled.keys=${nytimes.fetch.keys}
+app.guardian.enabled.keys=${guardian.fetch.keys}

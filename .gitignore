@@ -1,0 +1,94 @@
+# Build output
+target/
+build/
+!**/src/main/**/target/
+!**/src/test/**/target/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# IDE dosyaları
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+.idea
+*.iws
+*.iml
+*.ipr
+.vscode/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/nbproject/genfiles.properties
+/.nb-gradle/
+
+# Maven Wrapper
+!.mvn/wrapper/maven-wrapper.jar
+
+# Uygulama konfigürasyonları
+**/application.properties
+**/.env
+
+# Log dosyaları
+logs/
+*.log
+*.log.*
+backend/logs/
+ai_service/logs/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+.venv/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.env*
+
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Veritabanı dosyaları
+*.db
+*.sqlite
+*.sqlite3
+h2/
+
+# Geçici dosyalar
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+
+# Güvenlik dosyaları
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.truststore
+secret*
+*password*
+*credential*
+aws.json
+azure.json
+gcloud.json
+*token*
+
+# Fatura ve kişisel bilgi içeren dosyalar
+*invoice*
+*receipt*
+*personal*
