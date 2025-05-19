@@ -19,6 +19,13 @@ public interface AnalyzedNewsLinkRepository extends JpaRepository<AnalyzedNewsLi
     // Belirli bir haberin yer aldığı özet bağlantılarını bul
     List<AnalyzedNewsLink> findByOriginalNews(News originalNews);
     
+    // Özet ID'sine göre haber bağlantılarını bul
+    @Query("SELECT anl FROM AnalyzedNewsLink anl WHERE anl.analyzedSummaryOutput.id = :summaryId")
+    List<AnalyzedNewsLink> findBySummaryId(@Param("summaryId") Long summaryId);
+    
+    // Belirli bir özet ve haber kombinasyonuna ait bağlantıları bul
+    List<AnalyzedNewsLink> findByAnalyzedSummaryOutputAndOriginalNews(AnalyzedSummaryOutput analyzedSummaryOutput, News originalNews);
+    
     // Belirli bir özetle ilişkili orijinal haberleri bul
     @Query("SELECT anl.originalNews FROM AnalyzedNewsLink anl WHERE anl.analyzedSummaryOutput.id = :summaryId")
     List<News> findOriginalNewsBySummaryId(@Param("summaryId") Long summaryId);
@@ -26,4 +33,4 @@ public interface AnalyzedNewsLinkRepository extends JpaRepository<AnalyzedNewsLi
     // Belirli bir haberle ilişkili özetleri bul
     @Query("SELECT anl.analyzedSummaryOutput FROM AnalyzedNewsLink anl WHERE anl.originalNews.id = :newsId")
     List<AnalyzedSummaryOutput> findSummariesByNewsId(@Param("newsId") Long newsId);
-} 
+}

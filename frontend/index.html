@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akıllı Finans Haber Özetleri</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Akıllı Finans Haber Özetleri</h1>
+        <p class="tagline">Yapay zeka destekli finans dünyası analizi</p>
+    </header>
+
+    <div id="filterBar" class="filter-bar">
+        <div class="filter-group">
+            <label for="filterDate">Tarihe Göre Filtrele:</label>
+            <input type="date" id="filterDate">
+        </div>
+
+        <div class="filter-group">
+            <label for="filterCategory">Kategoriye Göre Filtrele:</label>
+            <select id="filterCategory">
+                <option value="">Tüm Kategoriler</option>
+                <option value="EKONOMİ">EKONOMİ</option>
+                <option value="PİYASALAR">PİYASALAR</option>
+                <option value="SİYASET">SİYASET</option>
+                <option value="JEOPOLİTİK">JEOPOLİTİK</option>
+                <option value="TEKNOLOJİ">TEKNOLOJİ</option>
+                <option value="ENERJİ">ENERJİ</option>
+                <option value="İKLİM">İKLİM</option>
+            </select>
+        </div>
+
+        <button id="applyFiltersButton" class="filter-button">Filtrele</button>
+        <button id="clearFiltersButton" class="filter-button secondary">Filtreleri Temizle</button>
+    </div>
+
+    <main>
+        <h2>Analiz Edilmiş Haber Özetleri</h2>
+        <div id="summaryList" class="summary-list">
+            <!-- Özetler buraya JavaScript ile eklenecek -->
+            <p class="loading-message">Özetler yükleniyor...</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Akıllı Finans Haber Özetleri | Bu içerikler yapay zeka tarafından üretilmiştir.</p>
+    </footer>
+
+    <!-- Script dosyasını en sonda yükle -->
+    <script src="js/script.js"></script>
+</body>
+</html>

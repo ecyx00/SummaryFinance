@@ -83,11 +83,11 @@ public class NewsScheduler {
      * Bu metod, haber çekme işlemi başarıyla tamamlandığında çağrılır.
      */
     private void triggerAiAnalysis() {
-        String endpoint = aiServiceBaseUrl + "/trigger-analysis";
-        logger.info("Triggering AI analysis at: {}", endpoint);
+        String endpoint = "/trigger-analysis";
+        logger.info("Triggering AI analysis at: {}{}", aiServiceBaseUrl, endpoint);
         
         webClient.post()
-                .uri("/trigger-analysis")
+                .uri(endpoint) // sadece path kullanıyoruz, baseUrl webClient'da zaten tanımlı
                 .retrieve()
                 .toBodilessEntity()
                 .subscribe(
