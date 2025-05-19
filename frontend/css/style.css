@@ -1,4 +1,4 @@
-/* Akıllı Finans Haber Özetleri - Temel Stil Dosyası */
+/* Summary Finance - Temel Stil Dosyası */
 
 /* Temel Sıfırlama ve Genel Stiller */
 * {
@@ -310,6 +310,12 @@ footer {
     border-top: 1px solid #e1e4e8;
 }
 
+footer p {
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+}
+
 /* Bildirim Stilleri */
 .notification {
     position: fixed;
@@ -332,10 +338,42 @@ footer {
     font-size: 16px;
 }
 
-/* Mobil Uyumluluk */
+/* Responsive Tasarım */
+@media (max-width: 992px) {
+    body {
+        padding: 15px;
+    }
+    
+    header h1 {
+        font-size: 2.2rem;
+    }
+    
+    .summary-item {
+        padding: 15px;
+    }
+    
+    .summary-title {
+        font-size: 1.3rem;
+    }
+}
+
 @media (max-width: 768px) {
     body {
         padding: 10px;
+    }
+    
+    header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .tagline {
+        font-size: 0.9rem;
+    }
+    
+    .filter-bar {
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px;
     }
     
     .filter-group {
@@ -348,5 +386,64 @@ footer {
     
     .summary-title {
         font-size: 1.2rem;
+    }
+    
+    .summary-meta {
+        flex-direction: column;
+        gap: 5px;
+        align-items: flex-start;
+    }
+    
+    .categories {
+        margin-top: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 8px;
+    }
+    
+    header {
+        padding: 15px 0;
+    }
+    
+    header h1 {
+        font-size: 1.6rem;
+    }
+    
+    .tagline {
+        font-size: 0.85rem;
+    }
+    
+    main h2 {
+        font-size: 1.4rem;
+        text-align: center;
+    }
+    
+    .summary-item {
+        padding: 12px;
+    }
+    
+    .summary-title {
+        font-size: 1.1rem;
+    }
+    
+    .summary-preview {
+        font-size: 0.9rem;
+    }
+    
+    .category-tag {
+        font-size: 0.75rem;
+        padding: 2px 6px;
+    }
+    
+    .notification {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: initial;
+        font-size: 0.9rem;
+        padding: 10px 15px;
     }
 }

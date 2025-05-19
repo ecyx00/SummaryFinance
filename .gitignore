@@ -65,6 +65,7 @@ venv.bak/
 .env.development.local
 .env.test.local
 .env.production.local
+ai_service/.venv_new/
 
 # Şablon dosyaları hariç tutmamak için
 !.env_template
