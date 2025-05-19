@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 def group_news_stories_with_gemini(news_batch_to_group: List[Dict], api_key: str) -> Optional[List[Dict]]:
     """
-    Verilen haber listesini Gemini 1.5 Flash API'sini kullanarak anlamlı haber gruplarına ayırır.
+    Verilen haber listesini Gemini API'sini kullanarak anlamlı haber gruplarına ayırır.
     
     Args:
         news_batch_to_group: İşlenecek haberlerin listesi. Her haber şu alanları içermelidir:
@@ -88,19 +88,23 @@ def group_news_stories_with_gemini(news_batch_to_group: List[Dict], api_key: str
         # Prompt oluştur - gelişen hikayeler için detaylı yönergeler ve örnek çıktı formatı içerir
         
         prompt = f"""
-        # GÖREV TANIMI: GELİŞEN HİKAYELER İÇİN HABER GRUPLAMA
+        # GÖREV TANIMI: STRATEJİK FİNANSAL ANALİZ İLE GELİŞEN HİKAYE GRUPLARI OLUŞTURMA
 
-        Sen, farklı finansal, politik, teknolojik ve küresel olaylar arasındaki görünmeyen bağlantıları, zincirleme reaksiyonları ve ortak üst temaları tespit etme konusunda uzmanlaşmış, son derece deneyimli bir stratejik analiz ve araştırma şefisin. Görevin, aşağıda JSON formatında sunulan haber makalelerini (her biri `id`, `title`, `extracted_keywords` ve `content` içerir) derinlemesine inceleyerek, **yüzeyde farklı ve bağımsız gibi görünen olaylar arasında anlamlı, çapraz tematik veya potansiyel nedensel ilişkiler kuran "gelişen hikaye" grupları oluşturmaktır.**
+        Sen, küresel ekonomi, finansal piyasalar, şirket stratejileri, teknolojik kırılımlar ve jeopolitik dinamikler arasında karmaşık, genellikle gözden kaçan bağlantıları tespit etme; olaylar arasındaki zincirleme reaksiyonları ve altta yatan makro temaları sentezleme konusunda uzmanlaşmış, üst düzey bir stratejik analiz ve araştırma direktörüsün. Temel görevin, sinyali gürültüden ayırmak ve farklı bilgi parçacıklarından bütüncül bir anlayış inşa etmektir.
 
-        ## TEMEL PRENSİPLER VE İSTENMEYENLER:
-        1.  **FARKLI OLAYLAR ARASI KÖPRÜLER:** Odak noktan, **KESİNLİKLE** sadece aynı olayı farklı kaynaklardan bildiren veya birbirinin kopyası gibi duran haberleri bir araya getirmek DEĞİLDİR. Bunun yerine, bir olayın başka bir alakasız gibi görünen olayı nasıl etkilediğini, tetiklediğini veya onunla nasıl daha büyük bir resmin parçası haline geldiğini gösteren gruplar oluşturmalısın. Örneğin, bir jeopolitik gelişmenin belirli bir emtia fiyatına etkisi ve bunun da bir sektördeki şirketlerin performansına yansıması gibi zincirleme etkileri ara.
-        2.  **DERİN BAĞLANTILAR:** Sadece birkaç ortak anahtar kelimeye dayalı yüzeysel gruplamalar yapma. Haberlerin içerikleri arasında mantıksal bir akış, potansiyel bir etki mekanizması veya güçlü bir ortak tema olmalı.
-        3.  **GRUP BÜYÜKLÜĞÜ:** Oluşturacağın **her grup MUTLAKA en az 2 haber içermelidir.** Tek haberden oluşan gruplar kabul edilmeyecektir.
-        4.  **GRUP SAYISI:** Spesifik bir maksimum grup sayısı hedefleme. O günkü haber setinden gerçekten anlamlı, birbirinden belirgin şekilde ayrışan ve güçlü bağlantılara sahip **ana gelişen hikayeleri veya temaları** belirle. Eğer o gün çok bariz çapraz ilişkisel temalar yoksa, az sayıda grup üretmen (hatta hiç üretmemen) daha iyidir. Kalite, nicelikten önemlidir.
+        SANA VERİLEN GÖREV: Aşağıda JSON formatında sunulan bir dizi haber makalesini (her biri `id`, `title`, `extracted_keywords` ve `content` alanlarını içerir) derinlemesine inceleyeceksin. Bu inceleme sonucunda, ilk bakışta bağımsız veya alakasız gibi görünen olaylar arasında anlamlı, disiplinlerarası, çapraz tematik ve/veya potansiyel nedensel ilişkiler kuran, birbirinden belirgin şekilde ayrışan **"gelişen hikaye" grupları** oluşturman beklenmektedir.
 
-        ## BEKLENEN DÜŞÜNME VE ANALİZ ŞEKLİ (ÖRNEK AKIL YÜRÜTME):
-        *   "Bir teknoloji şirketinin Ar-Ge bütçesini rekor seviyede artırdığına dair bir haber (ID: tech01), bir ülkenin yüksek nitelikli mühendisler için yeni bir vize programı başlattığı haberiyle (ID: gov05) ve belirli bir endüstride otomasyonun hızla yayılacağına dair bir analistle yapılan röportajla (ID: econ03) nasıl birleşebilir? Belki de tema 'Teknolojik İnovasyon ve Yetenek Yarışının Ekonomik Etkileri'dir."
-        *   "Ortadoğu'da artan bir askeri gerginlik haberi (ID: geo07) ile küresel petrol sevkiyatlarında sigorta primlerinin yükseldiğine dair bir piyasa haberi (ID: market02) ve bir havayolu şirketinin artan yakıt maliyetleri nedeniyle kar marjının düştüğünü açıkladığı bir haber (ID: biz04) arasında 'Jeopolitik Risklerin Enerji Maliyetleri ve Taşımacılık Sektörüne Yansıması' gibi bir hikaye oluşabilir."
+        ## TEMEL PRENSİPLER VE KESİNLİKLE KAÇINILMASI GEREKENLER:
+        1.  **FARKLI OLAYLAR ARASI KÖPRÜLER KUR (KRİTİK!):** Odak noktan, **ASLA ve ASLA** sadece aynı olayı (örneğin, aynı şirket duyurusunu veya aynı ekonomik veriyi) farklı kaynaklardan bildiren, birbirinin tekrarı veya çok benzer içeriklere sahip haberleri bir araya getirmek DEĞİLDİR. Bu tür gruplamalar **KESİNLİKLE İSTENMEMEKTEDİR**. Bunun yerine, bir olayın, normalde ilgisiz görünen başka bir alandaki bir olayı nasıl etkilediğini, tetiklediğini, onunla nasıl birleşerek daha büyük ve yeni bir anlam katmanı oluşturduğunu veya daha geniş bir makro trendin parçası olduğunu gösteren **özgün ve içgörülü** gruplar oluşturmalısın. Örnek: Bir ülkedeki kuraklık haberinin (iklim), belirli tarım emtialarının fiyatlarını (piyasalar) nasıl etkilediği ve bunun da gıda enflasyonu (ekonomi) ve tüketici şirketlerinin kâr marjları (şirket haberleri) üzerinde nasıl bir baskı oluşturduğu gibi çoklu bağlantılar ara.
+        2.  **DERİN VE ANLAMLI BAĞLANTILAR:** Yalnızca birkaç ortak anahtar kelimenin varlığına dayalı yüzeysel veya zorlama gruplamalar yapmaktan **KESİNLİKLE KAÇIN**. Grupladığın haberlerin içerikleri arasında somut, mantıksal bir akış, kanıtlanabilir veya güçlü bir şekilde çıkarımlanabilir bir etki mekanizması veya birbirini tamamlayan/açıklayan güçlü bir ortak tema olmalıdır. "Bu haberler 'ekonomi' hakkında" gibi genel etiketler yeterli değildir; spesifik ve dinamik bir ilişki tanımlanmalıdır.
+        3.  **MİNİMUM GRUP BÜYÜKLÜĞÜ:** Oluşturacağın **her bir "gelişen hikaye" grubu MUTLAKA en az 2, tercihen 3 veya daha fazla haber içermelidir.** Tek haberden oluşan gruplar kesinlikle kabul edilmeyecektir ve bir değeri yoktur.
+        4.  **GRUP SAYISI VE KALİTESİ:** Belirli bir sayıda grup oluşturma zorunluluğun YOKTUR. Öncelik, gerçekten anlamlı, birbirinden net bir şekilde ayrışan ve güçlü iç bağlantılara sahip "gelişen hikayeler" tespit etmektir. Eğer o günkü haber seti içerisinde bu nitelikte bariz ve güçlü çapraz ilişkisel temalar bulunmuyorsa, az sayıda (hatta hiç) grup üretmen, zayıf veya anlamsız gruplar üretmenden çok daha iyidir. **Kalite, nicelikten kesinlikle daha önemlidir.** Anlamsız veya zorlama gruplar oluşturmaktan kaçın.
+        5.  **GRUPLAMA ODAĞI:** Haberlerin konuları farklı olabilir (örn: biri teknoloji, diğeri politika), ancak aralarında bir "hikaye" oluşturacak bir etkileşim, sonuç veya ortak bir üst tema olmalıdır.
+
+        ## BEKLENEN DÜŞÜNME VE ANALİZ ŞEKLİ (ÖRNEK AKIL YÜRÜTME İLE NE İSTEDİĞİMİ ANLA):
+        *   **İSTENEN ÖRNEK 1:** "Bir büyük yarı iletken üreticisinin yeni nesil çip üretiminde yaşadığı bir darboğaz haberi (ID: tech01), bu çipleri kullanan bir otomobil üreticisinin üretim hedeflerini düşürdüğünü açıkladığı bir haberle (ID: auto05) ve bu durumun küresel tedarik zincirlerindeki kırılganlığa işaret eden bir analistle yapılan röportajla (ID: econ03) birleşebilir. Bu grubun etiketi 'Yarı İletken Krizi ve Otomotiv Sektörüne Etkileri' gibi bir şey olabilir." Bu, farklı sektörlerdeki olayların birbirini nasıl etkilediğini gösteren iyi bir "gelişen hikaye" örneğidir.
+        *   **İSTENEN ÖRNEK 2:** "Gelişmekte olan bir ülkede yaşanan beklenmedik bir siyasi istikrarsızlık haberi (ID: geo07), o ülkenin para biriminde ani değer kaybı yaşandığına dair bir piyasa haberiyle (ID: market02) ve o ülkede büyük yatırımları olan uluslararası bir şirketin risk değerlendirmesini güncellediği bir haberle (ID: biz04) anlamlı bir grup oluşturabilir. Etiket: 'X Ülkesindeki Siyasi Belirsizliğin Finansal Piyasalara ve Uluslararası Yatırımlara Yansıması'."
+        *   **İSTENMEYEN ÖRNEK:** "Apple Yeni iPhone Modelini Tanıttı" (ID: apple01), "Samsung Yeni Galaxy Modelini Duyurdu" (ID: samsung01), "Xiaomi'den Yeni Amiral Gemisi Telefon" (ID: xiaomi01) haberlerini "Yeni Akıllı Telefon Modelleri" gibi bir etiketle gruplamak, bu görevin amacı dışındadır. Bu haberler benzer konularda olsa da, aralarında özel bir etkileşim veya gelişen bir hikaye olmayabilir. Ancak, bu haberlere ek olarak "Telekom Şirketleri 5G Altyapı Yatırımlarını Hızlandırıyor" (ID: telco01) gibi bir haber varsa ve yeni telefonların bu 5G altyapısını kullanacağı vurgulanıyorsa, o zaman "Yeni Nesil Akıllı Telefonlar ve 5G Altyapı Gelişmeleri" gibi bir grup daha anlamlı olabilir.
 
         ## ANALİZ EDİLECEK HABERLER (JSON Formatında):
         ```json
@@ -108,12 +112,19 @@ def group_news_stories_with_gemini(news_batch_to_group: List[Dict], api_key: str
         ```
 
         SENDEN İSTENEN ÇIKTI:
-        Lütfen analizinin sonucunu, KESİNLİKLE aşağıdaki JSON formatında bir liste olarak ver. Bu listenin her bir elemanı, belirlediğin bir "gelişen hikaye" grubunu temsil etmelidir. Yanıtının başında veya sonunda kesinlikle başka hiçbir metin, açıklama veya giriş/sonuç cümlesi OLMAMALIDIR. Sadece ve sadece istenen JSON formatındaki listeyi döndür.
+        Lütfen analizinin sonucunu, **KESİNLİKLE** aşağıdaki JSON formatında bir **liste** olarak ver. Bu listenin her bir elemanı, yukarıdaki prensipler doğrultusunda belirlediğin bir "gelişen hikaye" grubunu temsil eden bir JSON objesi olmalıdır.
+        Her bir grup objesi şu iki anahtarı içermelidir:
+        1.  `group_label`: String. Bu gruptaki haberlerin oluşturduğu, yukarıda tanımlanan "gelişen hikaye"yi veya çapraz tematik bağlantıyı yansıtan, kısa (tercihen 3-10 kelime), öz ve analitik bir etiket. Bu etiket, haberlerin basit bir birleşimi olmamalı, aralarındaki **dinamiği** veya **ortak sonucu** ifade etmelidir.
+        2.  `related_news_ids`: List[String]. Bu "gelişen hikaye" grubunu oluşturan ve sana verilen haberlerin orijinal `id`'lerini içeren bir liste. Bu listeye sadece gerçekten bu hikayeyle güçlü ve anlamlı bir bağlantısı olan haberlerin ID'lerini ekle.
+
+        Çıktının tamamı bir JSON listesi olmalıdır. Yanıtının başında veya sonunda **kesinlikle** başka hiçbir metin, açıklama, selamlama, giriş/sonuç cümlesi veya markdown formatlaşması (```json gibi) OLMAMALIDIR. Sadece ve sadece istenen JSON formatındaki listeyi döndür.
+
+        ÖRNEK ÇIKTI FORMATI:
         ```json
         {example_output_json}
         ```
 
-        Eğer verilen haberler arasında yukarıdaki prensiplere uygun, en az iki haber içeren ve farklı olaylar arasında anlamlı bağlantılar kuran hiçbir grup oluşturulamıyorsa, boş bir liste [] döndür.
+        Eğer verilen haberler arasında yukarıdaki katı prensiplere uygun, en az iki (tercihen üç veya daha fazla) haber içeren ve farklı olaylar arasında anlamlı, derin ve içgörülü bağlantılar kuran hiçbir "gelişen hikaye" grubu oluşturamıyorsa, **boş bir JSON listesi `[]` döndür.**
         """
         
         # Gemini API'ye isteği gönder
@@ -306,13 +317,13 @@ def analyze_individual_story_group(
         Bu analiz için sana verilen haberlerin orijinal id'lerini içeren listeyi değiştirmeden aynen buraya ekle.
         analysis_summary:
         Bu metin yaklaşık 350-700 kelime uzunluğunda olmalıdır.
-        Giriş ve Ana Tema: Bu haber grubunun merkezindeki ana olay(lar)ı ve bunların oluşturduğu ortak/gelişen temayı veya ana hikayeyi net bir şekilde tanımlayarak başla.
-        Haberler Arası Bağlantıların Detaylı Açıklaması: Gruptaki haberlerde anlatılan ana olayları, önemli verileri veya kilit argümanları belirgin bir şekilde ifade ederek (örn. "[Şirket adı]'nın açıkladığı rekor kar...", "X ülkesinin enerji politikalarındaki ani değişiklik...", "[Merkez Bankası Başkanı]'nın enflasyonla ilgili endişelerini dile getirmesi..." gibi), bu farklı olaylar veya bilgiler arasında nasıl bir ilişki, etkileşim, ardışıklık veya potansiyel nedensellik görüyorsun? Bir olay diğerini nasıl tetiklemiş, etkilemiş veya hangi ortak zemin üzerinde birleşmiş olabilir? Lütfen çıkarımlarını, verilen haber metinlerinden ve (varsa) extracted_keywords alanlarından spesifik pasajlara veya bilgilere atıfta bulunarak kanıtla ve detaylandır. Yüzeysel benzerliklerin ötesine geçerek altta yatan dinamikleri ve bağlantı noktalarını ortaya koy.
-        Potansiyel Etkiler ve Öngörüler: Bu bağlantılı gelişmelerin veya ortaya çıkan temanın daha geniş anlamda (ekonomik, politik, sektörel, teknolojik vb.) olası kısa ve orta vadeli etkileri neler olabilir? Bu analizine dayanarak hangi potansiyel sonuçlar veya gelecekteki gelişmeler öngörülebilir? Bu bölümdeki çıkarımların spekulatif nitelikte olduğunu unutma.
-        URL KULLANMA: Bu analiz metni içinde kesinlikle hiçbir URL linki kullanma.
+        1. Giriş ve Merkezi Tema: Bu haber grubunun merkezindeki ana olay(lar)ı ve bunların oluşturduğu, senin belirlediğin merkezi temayı veya ana hikayeyi net bir şekilde tanımlayarak başla.
+        2. Haberler Arası Bağlantıların Derinlemesine Açıklanması: Gruptaki haberlerde anlatılan ana olayları, önemli verileri veya kilit argümanları belirgin bir şekilde ifade ederek (örn: "[Şirket adı]'nın açıkladığı rekor kar...", "X ülkesinin enerji politikalarındaki ani değişiklik...", "[Merkez Bankası Başkanı]'nın enflasyonla ilgili endişelerini dile getirmesi..." gibi), bu farklı olaylar veya bilgiler arasında nasıl bir ilişki, etkileşim, ardışıklık veya potansiyel nedensellik görüyorsun? Bir olay diğerini nasıl tetiklemiş, etkilemiş veya hangi ortak zemin üzerinde birleşmiş olabilir? Lütfen çıkarımlarını, verilen haber metinlerinden ve (varsa) extracted_keywords alanlarından spesifik pasajlara veya bilgilere atıfta bulunarak kanıtla ve detaylandır. Yüzeysel benzerliklerin ötesine geçerek altta yatan dinamikleri ve bağlantı noktalarını ortaya koy. Olayları sıralamak yerine, aralarındaki mantıksal akışı ve birbirlerini nasıl etkilediklerini vurgulayan bir anlatı oluştur.
+        3. Potansiyel Etkiler ve Öngörüler: Geliştirdiğin merkezi tema ve ortaya koyduğun bağlantılar ışığında, bu gelişmelerin daha geniş anlamda (ekonomik, politik, sektörel, teknolojik vb.) olası kısa ve orta vadeli etkileri neler olabilir? Bu analizine dayanarak hangi potansiyel sonuçlar veya gelecekteki gelişmeler öngörülebilir?
+        4. URL KULLANMA: Bu analiz metni içinde kesinlikle hiçbir URL linki kullanma.
         main_categories:
         Aşağıdaki önceden tanımlanmış ana kategori listesinden, bu analiz ettiğin genel hikayeye, bağlantılara ve potansiyel etkilere en uygun olan 1 veya 2 kategoriyi seçerek bir JSON listesi olarak ver:
-        {categories}
+        {categories_str}
         
         ÇIKTI FORMATI (JSON OBJESİ):
         Yanıtını KESİNLİKLE aşağıdaki JSON formatında tek bir obje olarak ver. Yanıtının başında veya sonunda kesinlikle başka hiçbir metin, açıklama veya giriş/sonuç cümlesi OLMAMALIDIR. Sadece ve sadece istenen JSON formatındaki objeyi döndür.
@@ -321,9 +332,21 @@ def analyze_individual_story_group(
         {example_output_json}
         ```
 
+        ÜSLUP VE AKICILIK:
+        - Lütfen analiz metnini, bir insan analist tarafından yazılmış gibi doğal, akıcı ve çeşitli bir dil kullanarak oluştur.
+        - Aynı kelime veya cümle yapılarını sık sık tekrarlamaktan kaçın.
+        - Olayları ve çıkarımları birbirine bağlarken zengin bir bağlaç ve ifade çeşitliliği kullan.
+        - Okuyucunun kolayca takip edebileceği, mantıksal bir argüman akışı oluştur.
+
+        KAÇINILMASI GEREKEN İFADELER:
+        Lütfen analiz metninde aşağıdaki veya benzeri ifadeleri KULLANMAKTAN KAÇIN:
+        - "Bu haberde...", "İlk haber...", "İkinci haber..." gibi doğrudan haberlere numara veya sıra ile referans verme. Bunun yerine, haberin içeriğine veya konusuna atıfta bulun (örn: "Kredi notu düşüşünü ele alan gelişme...", "Avrupa Komisyonu'nun büyüme tahminleriyle ilgili rapor...").
+        - "Bu durum..." ifadesini aşırı kullanma. Bunun yerine, cümlenin öznesini veya olayı tekrar belirterek veya daha çeşitli bağlaçlar kullanarak akıcılığı artır. (Örn: "Kredi notundaki düşüş, yatırımcı güvenini sarstı." gibi ifadeler tercih et.)
+        - "Habere göre...", "Raporda belirtildiği üzere..." gibi doğrudan kaynak belirtme ifadelerini sık sık tekrarlama. Bilginin haberlerden geldiği zaten varsayılmaktadır.
+
         ÖNEMLİ NOTLAR:
-        Analizini sadece ve sadece sana verilen haber metinlerine, başlıklarına ve anahtar kelimelerine dayandır. Dışarıdan ek bilgi veya varsayım kullanma.
-        Objektif, dengeli ve analitik bir dil kullanmaya özen göster.
+        - Analizini sadece ve sadece sana verilen haber metinlerine, başlıklarına ve anahtar kelimelerine dayandır. Dışarıdan ek bilgi veya varsayım kullanma.
+        - Objektif, dengeli ve analitik bir dil kullanmaya özen göster.
         """
         
         # Gemini API'ye isteği gönder

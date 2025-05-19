@@ -40,13 +40,16 @@ public class SummaryService {
     }
     
     /**
-     * Tüm özet verilerini döndürür
+     * Tüm özet verilerini döndürür (gruplanmamış haber placeholderları hariç)
      * @return Özet listesi
      */
     public List<SummaryDTO> getAllSummaries() {
         logger.debug("Tüm özet verileri çekiliyor");
         List<AnalyzedSummaryOutput> summaries = summaryRepository.findAll();
-        return summaries.stream().map(this::convertToDTO).collect(Collectors.toList());
+        return summaries.stream()
+                .filter(summary -> !"UNGROUPED_PLACEHOLDER".equals(summary.getStoryTitle()))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
     
     /**
@@ -64,7 +67,7 @@ public class SummaryService {
     }
     
     /**
-     * Belirli bir kategoriye sahip özetleri filtreler
+     * Belirli bir kategoriye sahip özetleri filtreler (gruplanmamış haber placeholderları hariç)
      * @param category Kategori
      * @return Filtrelenmiş özet listesi
      */
@@ -73,20 +76,24 @@ public class SummaryService {
         List<AnalyzedSummaryOutput> allSummaries = summaryRepository.findAll();
         
         return allSummaries.stream()
+                .filter(summary -> !"UNGROUPED_PLACEHOLDER".equals(summary.getStoryTitle()))
                 .filter(summary -> summary.getAssignedCategories().contains(category))
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
     
     /**
-     * Belirli bir tarihe ait özetleri getirir
+     * Belirli bir tarihe ait özetleri getirir (gruplanmamış haber placeholderları hariç)
      * @param date Tarih
      * @return Özet listesi
      */
     public List<SummaryDTO> getSummariesByDate(LocalDate date) {
         logger.debug("Tarih {} için özetler filtreleniyor", date);
         List<AnalyzedSummaryOutput> summaries = summaryRepository.findByPublicationDate(date);
-        return summaries.stream().map(this::convertToDTO).collect(Collectors.toList());
+        return summaries.stream()
+                .filter(summary -> !"UNGROUPED_PLACEHOLDER".equals(summary.getStoryTitle()))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
     
     /**

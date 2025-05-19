@@ -6,6 +6,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
@@ -34,7 +35,25 @@ public class NotificationService {
      * @return SSE olay akışı
      */
     public Flux<ServerSentEvent<String>> getEventStream() {
-        return eventSink.asFlux();
+        // Normal olaylar ve keep-alive sinyallerini birleştir
+        return Flux.merge(
+            eventSink.asFlux(),
+            getKeepAliveSignals()
+        );
+    }
+    
+    /**
+     * Düzenli aralıklarla keep-alive (ping) sinyali göndererek bağlantıların açık kalmasını sağlar.
+     * Bu, SSE bağlantılarının her 5 saniyede bir yeniden bağlanma sorununu engeller.
+     * @return Keep-alive mesaj akışı
+     */
+    private Flux<ServerSentEvent<String>> getKeepAliveSignals() {
+        return Flux.interval(Duration.ofSeconds(25))
+                .map(i -> ServerSentEvent.<String>builder()
+                        .id("keep-alive-" + i)
+                        .event("keep-alive")
+                        .data("")
+                        .build());
     }
     
     /**
@@ -60,7 +79,7 @@ public class NotificationService {
         }
     }
     
-    // Keep-alive sinyali artık gönderilmiyor - istemci tarafında yeniden bağlanma mantığı eklenmeli
+    // 25 saniyede bir keep-alive sinyali gönderiliyor - SSE bağlantısının sürekli yeniden kurulmasını önler
     
     /**
      * Belirtilen tarihten sonra yeni özet eklenip eklenmediğini kontrol eder

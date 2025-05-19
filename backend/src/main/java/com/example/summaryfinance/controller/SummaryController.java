@@ -4,7 +4,6 @@ import com.example.summaryfinance.dto.SummaryDTO;
 import com.example.summaryfinance.service.SummaryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,24 +31,40 @@ public class SummaryController {
      * Tüm özet listesini döndürür veya filtreleme parametreleri ile filtrelenmiş liste döndürür
      */
     @GetMapping("/summaries")
-    public ResponseEntity<List<SummaryDTO>> getSummaries(
+    public ResponseEntity<?> getSummaries(
             @RequestParam(required = false) String category,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+            @RequestParam(required = false) String date) {
         
-        List<SummaryDTO> summaries;
-        
-        if (category != null && !category.isEmpty()) {
-            logger.info("Kategori filtresi uygulanıyor: {}", category);
-            summaries = summaryService.getSummariesByCategory(category);
-        } else if (date != null) {
-            logger.info("Tarih filtresi uygulanıyor: {}", date);
-            summaries = summaryService.getSummariesByDate(date);
-        } else {
-            logger.info("Tüm özet listesi alınıyor");
-            summaries = summaryService.getAllSummaries();
+        try {
+            List<SummaryDTO> summaries;
+            
+            if (category != null && !category.isEmpty()) {
+                logger.info("Kategori filtresi uygulanıyor: {}", category);
+                summaries = summaryService.getSummariesByCategory(category);
+            } else if (date != null && !date.isEmpty()) {
+                logger.info("Tarih filtresi uygulanıyor (ham değer): {}", date);
+                
+                // Tarih string'ini LocalDate'e çevir
+                try {
+                    LocalDate parsedDate = LocalDate.parse(date);
+                    logger.info("Tarih başarıyla ayrıştırıldı: {}", parsedDate);
+                    summaries = summaryService.getSummariesByDate(parsedDate);
+                } catch (Exception e) {
+                    logger.error("Tarih ayrıştırma hatası: {}", e.getMessage());
+                    return ResponseEntity.badRequest()
+                            .body("Tarih formatı geçersiz. Lütfen YYYY-MM-DD formatında bir tarih girin.");
+                }
+            } else {
+                logger.info("Tüm özet listesi alınıyor");
+                summaries = summaryService.getAllSummaries();
+            }
+            
+            return ResponseEntity.ok(summaries);
+        } catch (Exception e) {
+            logger.error("Özetler alınırken beklenmeyen hata: {}", e.getMessage());
+            return ResponseEntity.internalServerError()
+                    .body("Veriler işlenirken bir hata oluştu: " + e.getMessage());
         }
-        
-        return ResponseEntity.ok(summaries);
     }
     
     /**

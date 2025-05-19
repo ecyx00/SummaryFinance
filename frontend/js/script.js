@@ -134,6 +134,9 @@ function showNotification(title, message) {
 function fetchSummaries() {
     const summaryListElement = document.getElementById('summaryList');
     
+    // Filtreleme bölümünü göster
+    document.getElementById('filterBar').style.display = 'flex';
+    
     // Yükleniyor göstergesi ekle
     if (summaryListElement) {
         summaryListElement.innerHTML = '<div class="loading">Özetler yükleniyor...</div>';
@@ -148,6 +151,11 @@ function fetchSummaries() {
             return response.json();
         })
         .then(data => {
+            // Global değişkene tüm özetleri kaydet (filtreleme için)
+            allSummaries = data || [];
+            console.log('Tüm özetler yüklendi. Toplam:', allSummaries.length);
+            
+            // Özetleri görüntüle
             updateSummaryList(data);
         })
         .catch(error => {
@@ -175,9 +183,17 @@ function updateSummaryList(summaries) {
     // Liste içeriğini temizle
     summaryListElement.innerHTML = '';
     
-    // Veri yoksa bilgi göster
-    if (!summaries || summaries.length === 0) {
-        summaryListElement.innerHTML = '<div class="no-data">Henüz analiz edilmiş özet bulunmuyor.</div>';
+    // Veri kontrolü daha güvenli hale getirildi
+    if (!summaries) {
+        console.error('Geçersiz veri: summaries tanımlı değil');
+        summaryListElement.innerHTML = '<div class="no-data">Veri formatında hata oluştu. Lütfen sayfayı yenileyin.</div>';
+        return;
+    }
+    
+    // Boş dizi kontrolü
+    if (summaries.length === 0 || !Array.isArray(summaries)) {
+        console.log('Boş özet listesi veya geçersiz format:', summaries);
+        summaryListElement.innerHTML = '<div class="no-data">Seçilen filtrelere uygun analiz edilmiş özet bulunmuyor.</div>';
         return;
     }
     
@@ -213,7 +229,7 @@ function updateSummaryList(summaries) {
                 ${categoriesHtml}
             </div>
             <div class="summary-content">
-                ${summary.storyContent}
+                ${getSummaryPreview(summary.summaryText) || 'Özet içeriği yüklenemedi.'}
             </div>
             
             ${summary.sourceUrls && summary.sourceUrls.length > 0 ? `
@@ -304,6 +320,9 @@ function displaySummaryDetail(summary) {
     
     if (!summaryListElement) return;
     
+    // Filtreleme bölümünü gizle
+    document.getElementById('filterBar').style.display = 'none';
+    
     // Tarih formatını düzenle
     const publicationDate = new Date(summary.publicationDate).toLocaleDateString('tr-TR', {
         year: 'numeric', 
@@ -358,26 +377,16 @@ function displaySummaryDetail(summary) {
 /**
  * Filtreleri uygular ve özet listesini günceller
  */
+// Tüm özetleri tutan global değişken
+let allSummaries = [];
+
+/**
+ * Filtreleri uygular ve özet listesini günceller
+ * Backend'e gitmeden JS ile filtreleme yapar
+ */
 function applyFilters() {
     const dateFilter = document.getElementById('filterDate').value;
     const categoryFilter = document.getElementById('filterCategory').value;
-    
-    // Query parametreleri oluştur
-    let queryParams = [];
-    
-    if (dateFilter) {
-        queryParams.push(`date=${dateFilter}`);
-    }
-    
-    if (categoryFilter) {
-        queryParams.push(`category=${encodeURIComponent(categoryFilter)}`);
-    }
-    
-    // API URL'yi oluştur
-    let apiUrl = 'http://localhost:8888/api/news/summaries';
-    if (queryParams.length > 0) {
-        apiUrl += '?' + queryParams.join('&');
-    }
     
     // Yükleniyor göstergesi ekle
     const summaryListElement = document.getElementById('summaryList');
@@ -385,21 +394,62 @@ function applyFilters() {
         summaryListElement.innerHTML = '<div class="loading">Filtrelenmiş özetler yükleniyor...</div>';
     }
     
-    // Filtrelenmiş verileri çek
-    fetch(apiUrl)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('API yanıt vermedi: ' + response.status);
-            }
-            return response.json();
-        })
-        .then(data => {
-            updateSummaryList(data);
-        })
-        .catch(error => {
-            console.error('Filtrelenmiş veriler çekilirken hata oluştu:', error);
-            if (summaryListElement) {
-                summaryListElement.innerHTML = '<div class="error">Veriler filtrelenirken bir hata oluştu.</div>';
-            }
-        });
+    // Eğer filtreleme seçenekleri yoksa, tüm özetleri göster
+    if (!dateFilter && !categoryFilter) {
+        console.log('Filtre yok, tüm özetleri göster');
+        updateSummaryList(allSummaries);
+        return;
+    }
+    
+    console.log('Frontend filtreleme uygulanıyor...');
+    console.log('Seçilen tarih:', dateFilter);
+    console.log('Seçilen kategori:', categoryFilter);
+    
+    try {
+        // Frontend'de filtreleme yapacak
+        let filteredSummaries = [...allSummaries]; // Tüm verilerin kopyasını al
+        
+        // Tarih filtresi uygula
+        if (dateFilter) {
+            const filterDate = new Date(dateFilter);
+            // Tarih karşılaştırma için sadece yıl-ay-gün kullan
+            const filterDateString = filterDate.toISOString().split('T')[0];
+            
+            console.log('Filtreleme tarihi:', filterDateString);
+            
+            filteredSummaries = filteredSummaries.filter(summary => {
+                if (!summary.publicationDate) {
+                    return false;
+                }
+                
+                // Özet tarihini de yıl-ay-gün formatına dönüştür
+                const summaryDate = new Date(summary.publicationDate).toISOString().split('T')[0];
+                console.log('Karşılaştırılan tarihler:', summaryDate, filterDateString);
+                return summaryDate === filterDateString;
+            });
+            
+            console.log('Tarih filtresinden sonra kalan özet sayısı:', filteredSummaries.length);
+        }
+        
+        // Kategori filtresi uygula
+        if (categoryFilter && categoryFilter !== 'Tüm Kategoriler') {
+            filteredSummaries = filteredSummaries.filter(summary => {
+                return summary.assignedCategories && 
+                       summary.assignedCategories.includes(categoryFilter);
+            });
+            
+            console.log('Kategori filtresinden sonra kalan özet sayısı:', filteredSummaries.length);
+        }
+        
+        // Filtrelenmiş özetleri göster
+        console.log('Filtreleme tamamlandı. Görüntülenecek özet sayısı:', filteredSummaries.length);
+        updateSummaryList(filteredSummaries);
+    } catch (error) {
+        console.error('Filtreleme sırasında hata:', error);
+        
+        if (summaryListElement) {
+            summaryListElement.innerHTML = 
+                `<div class="error">Veriler filtrelenirken bir hata oluştu: ${error.message || 'Bilinmeyen hata'}</div>`;
+        }
+    }
 }
