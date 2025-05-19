@@ -2,12 +2,15 @@
 
 Bu dokümantasyon, SummaryFinance projesindeki tüm API endpointlerini, parametrelerini, dönen değerlerini ve detaylı iş akışlarını açıklar.
 
+**Son Güncelleme Tarihi**: 19 Mayıs 2025
+
 ## İçindekiler
 
 1. [Haberler API](#haberler-api)
-2. [İç API](#iç-api)
-3. [SSE Bildirimleri API](#sse-bildirimleri-api)
-4. [Sistem Genel İş Akışı](#sistem-genel-iş-akışı)
+2. [Özetler API](#özetler-api)
+3. [İç API](#iç-api)
+4. [SSE Bildirimleri API](#sse-bildirimleri-api)
+5. [Sistem Genel İş Akışı](#sistem-genel-iş-akışı)
 
 ---
 
@@ -119,6 +122,80 @@ veya
 
 - Status: `500 Internal Server Error` (hata durumunda)
 - Body: `"Reactive news fetch failed: <hata-mesajı>"`
+
+---
+
+## Özetler API
+
+Analiz edilmiş haber özetleri ve ilgili verileri getiren API endpointleri. Bu endpointler frontend tarafından, kullanıcılara gösterilecek analiz edilmiş haber özetlerini almak için kullanılır.
+
+### GET `/api/summaries`
+
+Tüm analiz edilmiş haber özetlerini getirir. Frontend'de filtreleme işlemleri yapılabilmesi için tüm verileri döndürür.
+
+**İş Akışı:**
+1. İstek alındığında `SummaryController.getSummaries()` metodu çağrılır
+2. `SummaryService.getAllSummaries()` metodu çağrılarak tüm özetler getirilir
+3. Sonuçlar SummaryDTO nesnelerine dönüştürülür ve döndürülür
+4. Frontend bu verileri alarak global bir değişkende (`allSummaries`) saklar ve üzerinde JavaScript ile filtreleme işlemleri yapar
+
+**Query Parametreleri:**
+- `category` (opsiyonel): Sadece loglama amaçlı, filtreleme artık frontend'de yapılıyor
+- `date` (opsiyonel): Sadece loglama amaçlı, filtreleme artık frontend'de yapılıyor
+
+**Dönüş Değeri:**
+- Status: `200 OK`
+- Body: Tüm özet DTO'larının listesi
+```json
+[
+  {
+    "id": "string",
+    "title": "string",
+    "summaryText": "string",
+    "categories": ["string"],
+    "relatedNewsUrls": ["string"],
+    "publishedAt": "2025-05-18T10:00:00"
+  }
+]
+```
+
+### GET `/api/summaries/{id}`
+
+Belirli bir ID'ye sahip haber özetinin detaylarını getirir. Özet detay sayfasında kullanılır.
+
+**İş Akışı:**
+1. İstek alındığında `SummaryController.getSummaryById(id)` metodu çağrılır
+2. `SummaryService.getSummaryById(id)` metodu ile belirtilen ID'ye sahip özet getirilir
+3. Özet bulunamazsa 404 hatası döndürülür
+4. Özet bulunursa, ilgili haberler ve kategoriler de dahil edilerek detaylı bir DTO olarak döndürülür
+
+**URL Parametreleri:**
+- `id`: Özetin benzersiz tanımlayıcısı
+
+**Dönüş Değeri:**
+- Status: `200 OK`
+- Body: Detaylı özet DTO'su
+```json
+{
+  "id": "string",
+  "title": "string",
+  "summaryText": "string",
+  "categories": ["string"],
+  "relatedNews": [
+    {
+      "newsId": "string",
+      "title": "string",
+      "url": "string",
+      "source": "string"
+    }
+  ],
+  "publishedAt": "2025-05-18T10:00:00"
+}
+```
+
+**Dönüş Değeri (Hata):**
+- Status: `404 Not Found`
+- Body: `"Özet bulunamadı: {id}"`
 
 ---
 
