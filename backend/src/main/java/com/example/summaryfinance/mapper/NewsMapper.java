@@ -4,14 +4,15 @@ import com.example.summaryfinance.dto.NewsDTO;
 import com.example.summaryfinance.entity.News;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
+// Mappers import'una artık gerek yok
+// import org.mapstruct.factory.Mappers; 
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring") // Bu, Spring'in NewsMapperImpl'i bir bean olarak yönetmesini sağlar
 public interface NewsMapper {
 
-    NewsMapper INSTANCE = Mappers.getMapper(NewsMapper.class);
+    // NewsMapper INSTANCE = Mappers.getMapper(NewsMapper.class); // BU SATIRI SİL
 
     // News -> NewsDTO (id ve fetchedAt otomatik olarak ignore edilir)
     NewsDTO toDto(News news);

@@ -1,104 +1,98 @@
 package com.example.summaryfinance.scheduler;
 
 import com.example.summaryfinance.service.NewsService;
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired; // Eğer webClientBuilder'ı field olarak tutacaksan
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.time.Duration; // Duration import'u
-import java.time.Instant; // Instant import'u
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDateTime;
 
-/**
- * Haber çekme işlemini periyodik olarak tetikleyen zamanlanmış görev.
- * İşlemin başlangıcını, sonucunu ve süresini loglar.
- */
 @Component
 public class NewsScheduler {
 
     private static final Logger logger = LoggerFactory.getLogger(NewsScheduler.class);
     private final NewsService newsService;
-    private final WebClient webClient;
-    
+    private WebClient webClient; // Constructor'dan çıkarıp field yap
+    private final WebClient.Builder webClientBuilder; // Bunu constructor'da alıp field yap
+
     @Value("${ai.service.url:http://localhost:8000}")
     private String aiServiceBaseUrl;
 
+    // Constructor'ı güncelle
+    @Autowired // Spring 4.3+ için constructor injection'da @Autowired zorunlu değil ama açıkça belirtmek iyi
     public NewsScheduler(NewsService newsService, WebClient.Builder webClientBuilder) {
         this.newsService = newsService;
-        this.webClient = webClientBuilder.baseUrl(aiServiceBaseUrl).build();
+        this.webClientBuilder = webClientBuilder; // Builder'ı field'a ata
+        logger.info("NewsScheduler CONSTRUCTOR: NewsScheduler bean created. aiServiceBaseUrl (at construction): {}", aiServiceBaseUrl);
+        // this.webClient = webClientBuilder.baseUrl(aiServiceBaseUrl).build(); // BU SATIRI BURADAN KALDIR
     }
 
-    /**
-     * application.properties dosyasındaki 'news.fetch.cron' ifadesine göre
-     * periyodik olarak çalışır ve haber çekme servisini tetikler.
-     * Varsayılan olarak her gün sabah 5'te çalışır.
-     */
-    @Scheduled(cron = "${news.fetch.cron:0 0 5 * * ?}")
-    public void triggerDailyNewsFetch() {
-        Instant startTime = Instant.now(); // İşlem başlangıç zamanı
-        logger.info("Scheduled news fetch task started at {}", startTime);
+    @PostConstruct
+    public void init() {
+        // aiServiceBaseUrl burada @Value ile enjekte edilmiş olmalı
+        this.webClient = this.webClientBuilder.baseUrl(this.aiServiceBaseUrl).build(); // WebClient'ı burada oluştur
+        logger.info("NewsScheduler POSTCONSTRUCT: NewsScheduler bean initialized. aiServiceBaseUrl (after @Value injection): {}. WebClient configured.", aiServiceBaseUrl);
+    }
 
+    @Scheduled(cron = "${news.fetch.cron}", zone = "Europe/Istanbul")
+    public void triggerDailyNewsFetch() {
+        // METOD BAŞLANGIÇ LOGU
+        logger.info("SCHEDULER_TASK_STARTED: triggerDailyNewsFetch called at {}", LocalDateTime.now());
+        Instant startTime = Instant.now();
         try {
-            // NewsService'deki güncellenmiş reaktif metodu çağır
-            newsService.fetchAndSaveAllConfiguredNewsReactive() // <--- METOD ADI GÜNCELLENDİ
-                    .doFinally(signalType -> { // Akış her durumda bittiğinde (başarılı, hatalı, iptal) çalışır
+            newsService.fetchAndSaveAllConfiguredNewsReactive()
+                    .doFinally(signalType -> {
                         Instant endTime = Instant.now();
                         long durationMillis = Duration.between(startTime, endTime).toMillis();
-                        // signalType, akışın nasıl sonlandığını belirtir (e.g., ON_COMPLETE, ON_ERROR, CANCEL)
-                        logger.info("Scheduled news fetch task finished at {}. Duration: {} ms. Signal type: {}",
+                        logger.info("SCHEDULER_TASK_FINISHED: triggerDailyNewsFetch finished at {}. Duration: {} ms. Signal type: {}",
                                 endTime, durationMillis, signalType);
                     })
                     .subscribe(
-                            null, // onNext: Mono<Void> için genellikle kullanılmaz.
-                            error -> { // onError: Akış bir hatayla sonlandığında çalışır.
-                                // Hatanın kendisi (stack trace dahil) newsService içinde zaten loglanmış olabilir.
-                                // Burada genel bir hata mesajı loglayabiliriz.
-                                logger.error("Scheduled news fetch task encountered an unrecoverable error.", error);
-                                // İsteğe bağlı: Burada bir bildirim mekanizması (e-posta, Slack vs.) tetiklenebilir.
+                            null,
+                            error -> {
+                                logger.error("SCHEDULER_TASK_ERROR: Scheduled news fetch task encountered an unrecoverable error.", error);
                             },
-                            () -> { // onComplete: Akış başarıyla ve hatasız tamamlandığında çalışır.
-                                // Başarı logu zaten doFinally içinde genel olarak atılıyor.
-                                logger.info("Scheduled news fetch task completed successfully. Triggering AI analysis...");
-                                
-                                // Python AI servisini tetikle
+                            () -> {
+                                logger.info("SCHEDULER_TASK_SUCCESS: Scheduled news fetch task completed successfully. Triggering AI analysis...");
                                 triggerAiAnalysis();
                             }
                     );
-        } catch (Exception e) {
-            // Bu blok, newsService.fetchAndSaveAllConfiguredNewsReactive() çağrısı
-            // subscribe edilmeden ÖNCE bir senkron hata fırlatırsa yakalar (çok nadir bir durum).
-            // Reaktif akıştaki hatalar .subscribe() içindeki onError bloğunda yakalanır.
-            logger.error("Unexpected synchronous error during the initiation of scheduled news fetch task.", e);
+        } catch (Throwable e) { // Catch Throwable for more safety
+            logger.error("SCHEDULER_TASK_UNEXPECTED_ERROR: Unexpected synchronous error during the initiation of scheduled news fetch task.", e);
             Instant endTime = Instant.now();
             long durationMillis = Duration.between(startTime, endTime).toMillis();
-            logger.info("Scheduled news fetch task aborted due to an unexpected synchronous error at {}. Duration: {} ms.", endTime, durationMillis);
+            logger.info("SCHEDULER_TASK_ABORTED: News fetch aborted at {}. Duration: {} ms.", endTime, durationMillis);
         }
     }
-    
-    /**
-     * Python AI servisinin /trigger-analysis endpoint'ine HTTP POST isteği gönderir.
-     * Bu metod, haber çekme işlemi başarıyla tamamlandığında çağrılır.
-     */
+
     private void triggerAiAnalysis() {
+        if (this.webClient == null) { // Ekstra güvenlik kontrolü
+            logger.error("SCHEDULER_TRIGGER_AI_ERROR: WebClient is not initialized!");
+            return;
+        }
         String endpoint = "/trigger-analysis";
-        logger.info("Triggering AI analysis at: {}{}", aiServiceBaseUrl, endpoint);
-        
+        logger.info("SCHEDULER_TRIGGER_AI: Triggering AI analysis at: {}{}", aiServiceBaseUrl, endpoint);
         webClient.post()
-                .uri(endpoint) // sadece path kullanıyoruz, baseUrl webClient'da zaten tanımlı
+                .uri(endpoint)
                 .retrieve()
                 .toBodilessEntity()
                 .subscribe(
                         response -> {
                             if (response.getStatusCode() == HttpStatus.OK || response.getStatusCode() == HttpStatus.ACCEPTED) {
-                                logger.info("AI analysis triggered successfully");
+                                logger.info("SCHEDULER_TRIGGER_AI_SUCCESS: AI analysis triggered successfully");
                             } else {
-                                logger.warn("AI analysis trigger returned unexpected status: {}", response.getStatusCode());
+                                logger.warn("SCHEDULER_TRIGGER_AI_WARN: AI analysis trigger returned unexpected status: {}", response.getStatusCode());
                             }
                         },
-                        error -> logger.error("Failed to trigger AI analysis", error)
+                        error -> logger.error("SCHEDULER_TRIGGER_AI_ERROR: Failed to trigger AI analysis", error)
                 );
     }
 }
