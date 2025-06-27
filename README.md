@@ -1,5 +1,7 @@
 # Summary Finance
 
+https://summaryfinance.me/
+
 Finans haberleri toplama, analiz etme ve özet çıkarma uygulaması.
 
 ## Proje Yapısı
