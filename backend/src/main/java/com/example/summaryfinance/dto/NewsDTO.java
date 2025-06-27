@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @NoArgsConstructor
@@ -13,7 +13,7 @@ public class NewsDTO {
     // Kaynağa özgü ID kaldırıldı
     private String url;
     private String title; // Başlık eklendi
-    private LocalDateTime publicationDate;
+    private ZonedDateTime publicationDate;
     private String section; // API'den gelen ham bölüm/kategori adı
     private String source;
 }

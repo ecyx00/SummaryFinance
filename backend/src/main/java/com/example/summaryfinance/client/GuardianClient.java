@@ -12,7 +12,8 @@ import reactor.core.publisher.Mono;
 
 import java.time.Duration; // Duration import'u
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+// import java.time.ZoneId; // Kullanılmıyor
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -172,10 +173,10 @@ public class GuardianClient implements NewsSourceClient {
         return Flux.fromIterable(newsList);
     }
 
-    private LocalDateTime parseDate(String dateStr) {
+    private ZonedDateTime parseDate(String dateStr) {
         if (dateStr == null || dateStr.isEmpty()) { return null; }
         try {
-            return LocalDateTime.parse(dateStr, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+            return ZonedDateTime.parse(dateStr, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         } catch (Exception e) {
             logger.warn("Could not parse date string with ISO_OFFSET_DATE_TIME format for Guardian: {}", dateStr);
             return null;

@@ -7,7 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
+// import java.time.format.DateTimeFormatter; // Kullanılmıyor
 import java.util.List;
 
 /**
@@ -44,15 +45,23 @@ public class SummaryController {
             } else if (date != null && !date.isEmpty()) {
                 logger.info("Tarih filtresi uygulanıyor (ham değer): {}", date);
                 
-                // Tarih string'ini LocalDate'e çevir
+                // Tarih string'ini ZonedDateTime'e çevir
                 try {
-                    LocalDate parsedDate = LocalDate.parse(date);
+                    // Önce ISO tarih formatını deneyelim (ISO_ZONED_DATE_TIME)
+                    ZonedDateTime parsedDate;
+                    try {
+                        parsedDate = ZonedDateTime.parse(date);
+                    } catch (Exception e) {
+                        // Eğer tam ISO formatı değilse, tarih kısmını ayrıştırıp günün başlangıcı olarak kabul edelim
+                        parsedDate = ZonedDateTime.parse(date + "T00:00:00Z[UTC]");
+                    }
+                    
                     logger.info("Tarih başarıyla ayrıştırıldı: {}", parsedDate);
                     summaries = summaryService.getSummariesByDate(parsedDate);
                 } catch (Exception e) {
                     logger.error("Tarih ayrıştırma hatası: {}", e.getMessage());
                     return ResponseEntity.badRequest()
-                            .body("Tarih formatı geçersiz. Lütfen YYYY-MM-DD formatında bir tarih girin.");
+                            .body("Tarih formatı geçersiz. Lütfen ISO formatında bir tarih girin (YYYY-MM-DD veya tam ISO-8601).");
                 }
             } else {
                 logger.info("Tüm özet listesi alınıyor");

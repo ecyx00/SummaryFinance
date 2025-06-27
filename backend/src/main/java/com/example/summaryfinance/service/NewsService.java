@@ -15,8 +15,8 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -44,7 +44,6 @@ public class NewsService {
     @Value("${api.client.inter-topic.delay.guardian.ms:2000}") // application.properties'den
     private long interTopicDelayGuardianMs;
 
-
     public NewsService(List<NewsSourceClient> newsSourceClients,
                        NewsRepository newsRepository,
                        NewsMapper newsMapper,
@@ -57,8 +56,9 @@ public class NewsService {
 
     public Mono<Void> fetchAndSaveAllConfiguredNewsReactive() {
         logger.info("Starting reactive news fetching process for all configured topics...");
-        final LocalDate endDate = LocalDate.now(); // Effectively final
-        final LocalDate startDate = endDate.minusDays(1); // Effectively final
+        final ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
+        final ZonedDateTime endDate = now.toLocalDate().atStartOfDay(ZoneId.of("UTC")); // Effectively final
+        final ZonedDateTime startDate = endDate.minusDays(1); // Effectively final
 
         List<String> nytimesTopicKeys = getEnabledTopicKeys(nytimesEnabledKeysCsv);
         List<String> guardianTopicKeys = getEnabledTopicKeys(guardianEnabledKeysCsv);
@@ -80,7 +80,7 @@ public class NewsService {
                             return Flux.empty();
                         }
                         logger.info("Guardian: Initiating fetch for topic key '{}', filter '{}'", topicKey, apiFilter);
-                        return finalGuardianClient.fetchNewsByTopic(apiFilter, startDate, endDate)
+                        return finalGuardianClient.fetchNewsByTopic(apiFilter, startDate.toLocalDate(), endDate.toLocalDate())
                                 .doOnError(e -> logger.error("Guardian: Error on topic key '{}': {}", topicKey, e.getMessage()))
                                 .onErrorResume(e -> Flux.empty())
                                 // Her topic bittikten sonra (tüm sayfaları çekildikten sonra) bir sonraki topic'e geçmeden önce gecikme
@@ -102,7 +102,7 @@ public class NewsService {
                             return Flux.empty();
                         }
                         logger.info("NYTimes: Initiating fetch for topic key '{}', filter '{}'", topicKey, apiFilter);
-                        return finalNytClient.fetchNewsByTopic(apiFilter, startDate, endDate)
+                        return finalNytClient.fetchNewsByTopic(apiFilter, startDate.toLocalDate(), endDate.toLocalDate())
                                 .doOnError(e -> logger.error("NYTimes: Error on topic key '{}': {}", topicKey, e.getMessage()))
                                 .onErrorResume(e -> Flux.empty())
                                 // Her topic bittikten sonra (tüm sayfaları çekildikten sonra) bir sonraki topic'e geçmeden önce gecikme
@@ -176,14 +176,17 @@ public class NewsService {
                     .map(newsMapper::toEntity)
                     .collect(Collectors.toList());
             if (!newsToSave.isEmpty()) {
-                LocalDateTime now = LocalDateTime.now();
+                // Şu anki zamanı al (UTC zaman diliminde)
+                ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
                 for (News newsEntity : newsToSave) {
                     if (newsEntity.getTitle() == null || newsEntity.getTitle().isEmpty()) newsEntity.setTitle("Başlık Yok");
-                    if (newsEntity.getSection() == null || newsEntity.getSection().isEmpty()) newsEntity.setSection("Diğer");
+                    // Not: section alanı artık News entity'sinde bulunmuyor
                     if (newsEntity.getPublicationDate() == null) {
                         logger.warn("News entity with URL {} has null publicationDate. Setting to (now - 1 hour).", newsEntity.getUrl());
+                        // ZonedDateTime doğrudan set edebiliriz
                         newsEntity.setPublicationDate(now.minusHours(1));
                     }
+                    // ZonedDateTime değerini set ediyoruz
                     newsEntity.setFetchedAt(now);
                 }
                 newsRepository.saveAll(newsToSave);
@@ -197,7 +200,12 @@ public class NewsService {
     }
 
     public List<NewsDTO> getAllNews() { return newsMapper.toDtoList(newsRepository.findAll()); }
-    public List<NewsDTO> getNewsBySection(String section) { return newsMapper.toDtoList(newsRepository.findBySection(section)); }
-    public List<NewsDTO> getNewsByDateRange(LocalDateTime start, LocalDateTime end) { return newsMapper.toDtoList(newsRepository.findByPublicationDateBetween(start, end)); }
+    // section metodu kaldırıldı, şimdilik ihtiyaç olursa yerine kategori bazlı filtreleme yapılabilir
+    public List<NewsDTO> getNewsByDateRange(ZonedDateTime start, ZonedDateTime end) {
+        // Artık doğrudan ZonedDateTime değerlerini repository'ye iletiyoruz
+        return newsMapper.toDtoList(
+            newsRepository.findByPublicationDateBetween(start, end)
+        );
+    }
     public List<NewsDTO> getNewsBySource(String source) { return newsMapper.toDtoList(newsRepository.findBySource(source)); }
 }

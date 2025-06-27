@@ -13,6 +13,8 @@ import reactor.core.publisher.Mono;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -171,7 +173,7 @@ public class NYTimesClient implements NewsSourceClient {
         return Flux.fromIterable(newsList);
     }
 
-    private LocalDateTime parseDate(String dateStr) {
+    private ZonedDateTime parseDate(String dateStr) {
         if (dateStr == null || dateStr.isEmpty()) { return null; }
         List<DateTimeFormatter> formatters = List.of(
                 DateTimeFormatter.ISO_OFFSET_DATE_TIME,
@@ -180,7 +182,13 @@ public class NYTimesClient implements NewsSourceClient {
         );
         for (DateTimeFormatter formatter : formatters) {
             try {
-                return LocalDateTime.parse(dateStr, formatter);
+                // Öncelikle ZonedDateTime olarak parse etmeyi dene
+                try {
+                    return ZonedDateTime.parse(dateStr, formatter);
+                } catch (Exception e) {
+                    // ZonedDateTime olarak parse edilemiyorsa, LocalDateTime olarak parse et ve UTC zaman dilimine çevir
+                    return LocalDateTime.parse(dateStr, formatter).atZone(ZoneId.of("UTC"));
+                }
             } catch (Exception e) { /* Ignore */ }
         }
         logger.warn("Could not parse date string with any known NYT format: {}", dateStr);

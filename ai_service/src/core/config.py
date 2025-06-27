@@ -36,6 +36,10 @@ class Settings(BaseSettings):
     GEMINI_MODEL_NAME: str = "" # Güvenli bir varsayılan
     SPRING_BOOT_SUBMIT_URL: str
     
+    # Feature Extraction Models
+    EMBEDDING_MODEL_NAME: str = "all-MiniLM-L6-v2"
+    SPACY_MODEL_NAME: str = "en_core_web_sm"
+    
     @property
     def DATABASE_URL(self) -> str:
         """PostgreSQL bağlantı URI'sini oluşturur."""

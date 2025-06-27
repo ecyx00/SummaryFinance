@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -22,12 +22,12 @@ public class NotificationService {
     private final Sinks.Many<ServerSentEvent<String>> eventSink;
     
     // Son özet güncellemesinin zaman damgasını tutar
-    private final AtomicReference<LocalDateTime> lastSummaryUpdateTime;
+    private final AtomicReference<ZonedDateTime> lastSummaryUpdateTime;
     
     public NotificationService() {
         // Sınırsız arabellek ve çoklu abonelik desteği ile bir sink oluştur
         this.eventSink = Sinks.many().multicast().onBackpressureBuffer();
-        this.lastSummaryUpdateTime = new AtomicReference<>(LocalDateTime.now());
+        this.lastSummaryUpdateTime = new AtomicReference<>(ZonedDateTime.now());
     }
     
     /**
@@ -60,7 +60,7 @@ public class NotificationService {
      * Yeni analiz özetleri kaydedildiğinde bildirim gönderir
      * @param timestamp Yeni özet kayıt zamanı
      */
-    public void sendNewSummariesNotification(LocalDateTime timestamp) {
+    public void sendNewSummariesNotification(ZonedDateTime timestamp) {
         // Son güncelleme zamanını ayarla
         this.lastSummaryUpdateTime.set(timestamp);
         
@@ -86,8 +86,8 @@ public class NotificationService {
      * @param since Kontrol başlangıç tarihi
      * @return Yeni özet varsa true, yoksa false döner
      */
-    public Mono<Boolean> hasNewSummariesSince(LocalDateTime since) {
-        LocalDateTime lastUpdate = this.lastSummaryUpdateTime.get();
+    public Mono<Boolean> hasNewSummariesSince(ZonedDateTime since) {
+        ZonedDateTime lastUpdate = this.lastSummaryUpdateTime.get();
         return Mono.just(lastUpdate != null && lastUpdate.isAfter(since));
     }
 }

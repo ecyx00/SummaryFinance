@@ -362,8 +362,7 @@ function displaySummaryDetail(summary) {
         <h1>${summary.storyTitle || 'Başlık Yok'}</h1>
         <div class="meta-info" style="margin-bottom: 15px;">
             <span class="publication-date">${formattedPublicationDate}</span>
-            <p style="margin-top: 5px; font-size: 0.9em; color: #555;">Kategoriler: ${categoriesText}</p>
-            ${categoriesHtml} {/* Tıklanabilir kategori etiketleri */}
+            ${categoriesHtml}
         </div>
         <div class="detail-section analysis-text">
             <h2>Analiz:</h2>

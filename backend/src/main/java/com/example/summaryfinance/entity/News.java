@@ -4,40 +4,53 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "news", indexes = {
-        @Index(name = "idx_news_url", columnList = "url", unique = true),
-        @Index(name = "idx_news_publication_date", columnList = "publicationDate"),
-        @Index(name = "idx_news_section", columnList = "section"),
+        @Index(name = "idx_news_publication_date", columnList = "publication_date"),
         @Index(name = "idx_news_source", columnList = "source")
 })
 @Getter
-@Setter // Veya @Data
+@Setter
 @NoArgsConstructor
 public class News {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Otomatik artan Long ID
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 512) // Başlık alanı
-    private String title;
-
-    @Column(nullable = false, unique = true, length = 1024) // URL alanı
+    @Column(name = "url", nullable = false, length = 2048)
     private String url;
-
-    @Column(nullable = false)
-    private LocalDateTime publicationDate;
-
-    @Column(nullable = false) // API'den gelen ham bölüm/kategori adı
-    private String section;
-
-    @Column(nullable = false)
+    
+    @Column(name = "title", length = 1024)
+    private String title;
+    
+    @Column(name = "source", length = 255)
     private String source;
-
-    @Column(nullable = false) // Ne zaman çektiğimizin kaydı
-    private LocalDateTime fetchedAt;
+    
+    @Column(name = "publication_date")
+    private ZonedDateTime publicationDate;
+    
+    @Column(name = "fetched_at", nullable = false)
+    private ZonedDateTime fetchedAt;
+    
+    // İlişkiler
+    @OneToMany(mappedBy = "news", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ArticleEntity> articleEntities = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "news", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StoryNewsLink> storyNewsLinks = new ArrayList<>();
+    
+    @OneToOne(mappedBy = "news", cascade = CascadeType.ALL, orphanRemoval = true)
+    private AiProcessingLog processingLog;
+    
+    @OneToMany(mappedBy = "sourceNews", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GraphEdge> sourceEdges = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "targetNews", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GraphEdge> targetEdges = new ArrayList<>();
 }
 

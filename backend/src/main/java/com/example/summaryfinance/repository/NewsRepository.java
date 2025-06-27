@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -18,13 +18,14 @@ public interface NewsRepository extends JpaRepository<News, Long> { // <--- ID t
     List<News> findBySection(String section);
 
     // Belirli bir tarih aralığındaki haberleri bulur
-    List<News> findByPublicationDateBetween(LocalDateTime start, LocalDateTime end);
+    List<News> findByPublicationDateBetween(ZonedDateTime start, ZonedDateTime end);
 
     // Belirli bir kaynağa göre haberleri bulur
     List<News> findBySource(String source);
 
     // Belirli bir bölüm ve tarih aralığındaki haberleri bulur
-    List<News> findBySectionAndPublicationDateBetween(String section, LocalDateTime start, LocalDateTime end);
+    @Deprecated // section alanı entity'de artık yok, ileride kaldırılacak
+    List<News> findBySectionAndPublicationDateBetween(String section, ZonedDateTime start, ZonedDateTime end);
 
     // Belirli bir URL'e sahip haberi bulur (tekilleştirme için)
     Optional<News> findByUrl(String url);

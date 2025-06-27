@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 /**
  * Bildirim kontroller sınıfı.
@@ -62,9 +62,9 @@ public class SseNotificationController {
      */
     @GetMapping("/check-new-summaries")
     public Mono<ResponseEntity<Boolean>> checkNewSummaries(String lastCheckTime) {
-        LocalDateTime checkTime = lastCheckTime != null ? 
-                LocalDateTime.parse(lastCheckTime) : 
-                LocalDateTime.now().minusDays(1);
+        ZonedDateTime checkTime = lastCheckTime != null ? 
+                ZonedDateTime.parse(lastCheckTime) : 
+                ZonedDateTime.now().minusDays(1);
                 
         return notificationService.hasNewSummariesSince(checkTime)
                 .map(hasNew -> ResponseEntity.ok(hasNew));

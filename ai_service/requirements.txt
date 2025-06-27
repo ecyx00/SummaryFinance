@@ -48,3 +48,7 @@ urllib3==2.4.0
 uvicorn==0.34.2
 watchfiles==1.0.5
 websockets==15.0.1
+spacy==3.7.4
+sentence-transformers==2.5.1
+torch==2.2.2
+pgvector==0.2.5

@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @RestController
@@ -51,15 +51,16 @@ public class NewsController {
         return ResponseEntity.ok(newsService.getAllNews());
     }
 
-    @GetMapping("/section/{section}")
-    public ResponseEntity<List<NewsDTO>> getNewsBySection(@PathVariable String section) {
-        return ResponseEntity.ok(newsService.getNewsBySection(section));
-    }
+    // section metodu artık kullanılmıyor, yeni entity modelinde kategori tabanlı filtreleme olacak
+    // @GetMapping("/section/{section}")
+    // public ResponseEntity<List<NewsDTO>> getNewsBySection(@PathVariable String section) {
+    //     return ResponseEntity.ok(newsService.getNewsBySection(section));
+    // }
 
     @GetMapping("/date-range")
     public ResponseEntity<List<NewsDTO>> getNewsByDateRange(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime end) {
         return ResponseEntity.ok(newsService.getNewsByDateRange(start, end));
     }
 
