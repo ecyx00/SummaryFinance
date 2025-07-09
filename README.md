@@ -25,13 +25,6 @@ Bu proje iki ana bileşenden oluşmaktadır:
 3. Gereksinimleri yükleyin: `pip install -r requirements.txt`
 4. Servisi başlatın: `uvicorn main:app --reload`
 
-## Özellikler
-
-- NYTimes ve Guardian kaynaklarından günlük finans haberleri toplama
-- Kategori bazlı filtreleme 
-- AI-tabanlı haber analizi ve özet çıkarma
-- Günlük haber özetleri oluşturma
-
 ## Teknoloji Yığını
 
 - **Backend**: Java 17, Spring Boot, PostgreSQL
