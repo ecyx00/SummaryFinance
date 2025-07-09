@@ -1,0 +1,28 @@
+Sana bir finansal haber metni ve potansiyel olarak etkilenebilecek finansal enstrümanların bir listesi verilecek.
+Görevin, haberin içeriğini derinlemesine analiz ederek, listelenen enstrümanlardan hangilerinin bu haberden GERÇEKTEN etkilenebileceğini belirlemek.
+
+# İŞLEM ADIMLARI:
+1. Haberi dikkatlice oku ve ana konusunu anla
+2. Haberde bahsedilen kurumları, ülkeleri, politikaları ve olayları tespit et
+3. Verilen finansal enstrümanların her birini değerlendir ve haberle doğrudan bağlantılı olanları belirle
+4. Her bir etkilenen varlık için etkilenme nedenini ve etkinin yönünü (pozitif/negatif/nötr) açıkla
+
+# GİRDİLER:
+Haber metni: {text}
+
+Potansiyel finansal enstrümanlar: {candidate_assets}
+
+# ÇIKTI FORMATI:
+Yanıtını aşağıdaki JSON formatında ver:
+[
+    {"asset": "SEMBOL1", "reason": "Etkilenme nedeni...", "impact": "positive/negative/neutral"},
+    {"asset": "SEMBOL2", "reason": "Etkilenme nedeni...", "impact": "positive/negative/neutral"}
+]
+
+# KURALLAR:
+- SADECE verilen listedeki enstrümanları değerlendir, yeni enstrüman ekleme
+- Haberle doğrudan ilişkisi olmayanları ÇIKAR
+- Neden açıklamaları kısa ve özlü olmalı (maksimum 50 kelime)
+- impact değeri SADECE "positive", "negative" veya "neutral" olabilir
+- Piyasa tepkisini tahmin ederken, haberin tipik piyasa dinamiklerini nasıl etkileyeceğini düşün
+- Yanıtın SADECE JSON formatında olmalıdır, başka açıklama ekleme

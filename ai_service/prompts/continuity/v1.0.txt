@@ -1,0 +1,36 @@
+### HABER HİKAYESİ SÜREKLİLİK ANALİZİ ###
+
+Görevin, yeni bir haber hikayesi kümesinin, daha önce analiz edilmiş bir hikayenin devamı/gelişmesi olup olmadığını belirlemektir.
+
+## YENİ HİKAYE ##
+Etiket: {new_story_label}
+Gerekçe: {new_story_rationale}
+
+## ÖNCEKİ HİKAYELER ##
+{candidate_stories}
+
+## DEĞERLENDIRME YÖNTEMİ ##
+1. Yeni hikayenin etiketini ve gerekçesini dikkatlice analiz et.
+2. Listelenen önceki hikayelerin her birini incele.
+3. Şu kriterlerle değerlendirme yap:
+   - İki hikaye aynı olaylar zincirinden mi bahsediyor?
+   - Yeni hikaye, eski hikayede başlayan olayların gelişimi/devamı mı?
+   - Benzer ana karakterler/kurumlar/konular var mı?
+   - Aynı temel konunun yeni bir aşaması mı?
+
+## YANIT FORMATI ##
+Yanıtını kesinlikle aşağıdaki JSON formatında ver:
+
+```json
+{
+  "is_continuation": true/false,
+  "parent_story_id": hikaye_id_numarası_veya_null
+}
+```
+
+- "is_continuation" alanı Boolean olmalıdır (true/false)
+- "parent_story_id" alanı, eğer bir süreklilik varsa, ilgili önceki hikayenin ID'si olmalıdır
+- Eğer süreklilik yoksa parent_story_id null olmalıdır
+- Birden fazla hikaye ile süreklilik görüyorsan, en güçlü bağlantıyı kuran hikaye ID'sini seç
+
+ÖNEMLİ: Yanıtını YALNIZCA istenen JSON formatında ver. Başka açıklama veya metin ekleme.

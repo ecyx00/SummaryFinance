@@ -1,0 +1,367 @@
+# =================================================
+# CENTRAL BANKS
+# =================================================
+mappings:
+  - entity_type: "ORG"
+    entity_names:
+      - "Federal Reserve"
+      - "Fed"
+      - "FOMC"
+    assets:
+      - "EURUSD"
+      - "USDJPY"
+      - "GBPUSD"
+      - "TLT"
+      - "SPY"
+      - "QQQ"
+      - "GLD"
+    description: "Direct impact on USD through monetary policy, affecting FX pairs (EURUSD, USDJPY, GBPUSD), US Treasury bonds (TLT), and US indices (SPY, QQQ). Secondary impact on gold (GLD) as a safe-haven asset."
+  - entity_type: "ORG"
+    entity_names:
+      - "European Central Bank"
+      - "ECB"
+    assets:
+      - "EURUSD"
+      - "EURJPY"
+      - "EURGBP"
+      - "BUND"
+      - "STOXX50E"
+    description: "Direct impact on EUR through monetary policy, affecting FX pairs (EURUSD, EURJPY, EURGBP), European bonds (BUND), and European indices (STOXX50E)."
+  - entity_type: "ORG"
+    entity_names:
+      - "Bank of England"
+      - "BoE"
+    assets:
+      - "GBPUSD"
+      - "EURGBP"
+      - "UK100"
+      - "GILT"
+    description: "Direct impact on GBP, affecting FX pairs (GBPUSD, EURGBP), UK bonds (GILT), and UK indices (UK100)."
+  - entity_type: "ORG"
+    entity_names:
+      - "Bank of Japan"
+      - "BoJ"
+    assets:
+      - "USDJPY"
+      - "EURJPY"
+      - "NKY"
+      - "JGB"
+    description: "Direct impact on JPY, affecting FX pairs (USDJPY, EURJPY), Japanese bonds (JGB), and Nikkei index (NKY)."
+  - entity_type: "ORG"
+    entity_names:
+      - "People's Bank of China"
+      - "PBOC"
+    assets:
+      - "USDCNY"
+      - "AUDCNY"
+      - "MCHI"
+      - "000001.SS"
+    description: "Direct impact on CNY, affecting FX pairs (USDCNY, AUDCNY), Chinese equities (MCHI, Shanghai Composite)."
+
+# =================================================
+# MAJOR ECONOMIES
+# =================================================
+mappings:
+  - entity_type: "GPE"
+    entity_names:
+      - "United States"
+      - "USA"
+      - "US"
+    assets:
+      - "EURUSD"
+      - "USDJPY"
+      - "GBPUSD"
+      - "TLT"
+      - "SPY"
+      - "QQQ"
+      - "DIA"
+      - "IWM"
+      - "GLD"
+      - "USO"
+    description: "Direct impact on USD through economic data, affecting FX pairs (EURUSD, USDJPY, GBPUSD), Treasury bonds (TLT), US indices (SPY, QQQ, DIA, IWM), and commodities like gold (GLD) and oil (USO)."
+  - entity_type: "GPE"
+    entity_names:
+      - "China"
+      - "People's Republic of China"
+    assets:
+      - "USDCNY"
+      - "AUDCNY"
+      - "MCHI"
+      - "000001.SS"
+      - "GLD"
+      - "USO"
+    description: "Direct impact on CNY and Chinese markets (MCHI, Shanghai Composite), with secondary effects on commodities (GLD, USO) due to China's role in global trade."
+  - entity_type: "GPE"
+    entity_names:
+      - "Germany"
+    assets:
+      - "EURUSD"
+      - "EURJPY"
+      - "DAX"
+      - "EWG"
+      - "BUND"
+    description: "Impacts EUR as a key Eurozone economy, affecting FX pairs (EURUSD, EURJPY), German equities (DAX, EWG), and European bonds (BUND)."
+  - entity_type: "GPE"
+    entity_names:
+      - "Japan"
+    assets:
+      - "USDJPY"
+      - "EURJPY"
+      - "NKY"
+      - "EWJ"
+      - "JGB"
+    description: "Impacts JPY, affecting FX pairs (USDJPY, EURJPY), Japanese equities (NKY, EWJ), and bonds (JGB)."
+  - entity_type: "GPE"
+    entity_names:
+      - "United Kingdom"
+      - "UK"
+    assets:
+      - "GBPUSD"
+      - "EURGBP"
+      - "UK100"
+      - "GILT"
+    description: "Impacts GBP, affecting FX pairs (GBPUSD, EURGBP), UK equities (UK100), and bonds (GILT)."
+
+# =================================================
+# TECHNOLOGY - SEMICONDUCTORS
+# =================================================
+mappings:
+  - entity_type: "ORG"
+    entity_names:
+      - "NVIDIA"
+      - "Nvidia Corp"
+    assets:
+      - "NVDA"
+      - "TSM"
+      - "AMD"
+      - "INTC"
+      - "QQQ"
+      - "SPY"
+    description: "Direct impact on NVDA stock. Sector impact on competitors (AMD, INTC) and supplier (TSM). Index impact on Nasdaq (QQQ) and S&P 500 (SPY) due to large market cap."
+  - entity_type: "ORG"
+    entity_names:
+      - "Taiwan Semiconductor Manufacturing Company"
+      - "TSMC"
+    assets:
+      - "TSM"
+      - "NVDA"
+      - "AMD"
+      - "INTC"
+      - "AAPL"
+      - "QQQ"
+      - "SPY"
+    description: "Direct impact on TSM stock. Impacts customers (NVDA, AMD, INTC, AAPL) reliant on its manufacturing. Affects tech indices (QQQ, SPY)."
+  - entity_type: "ORG"
+    entity_names:
+      - "Intel"
+      - "Intel Corporation"
+    assets:
+      - "INTC"
+      - "AMD"
+      - "NVDA"
+      - "TSM"
+      - "QQQ"
+      - "SPY"
+    description: "Direct impact on INTC stock. Sector impact on competitors (AMD, NVDA) and supplier (TSM). Affects tech indices (QQQ, SPY)."
+  - entity_type: "ORG"
+    entity_names:
+      - "Advanced Micro Devices"
+      - "AMD"
+    assets:
+      - "AMD"
+      - "NVDA"
+      - "INTC"
+      - "TSM"
+      - "QQQ"
+      - "SPY"
+    description: "Direct impact on AMD stock. Sector impact on competitors (NVDA, INTC) and supplier (TSM). Affects tech indices (QQQ, SPY)."
+
+# =================================================
+# TECHNOLOGY - SOFTWARE & CLOUD
+# =================================================
+mappings:
+  - entity_type: "ORG"
+    entity_names:
+      - "Microsoft"
+      - "Microsoft Corporation"
+    assets:
+      - "MSFT"
+      - "AMZN"
+      - "GOOGL"
+      - "CRM"
+      - "QQQ"
+      - "SPY"
+    description: "Direct impact on MSFT stock. Sector impact on cloud competitors (AMZN, GOOGL, CRM). Affects tech indices (QQQ, SPY) due to large market cap."
+  - entity_type: "ORG"
+    entity_names:
+      - "Amazon"
+      - "Amazon.com"
+    assets:
+      - "AMZN"
+      - "MSFT"
+      - "GOOGL"
+      - "WMT"
+      - "QQQ"
+      - "SPY"
+    description: "Direct impact on AMZN stock. Sector impact on cloud (MSFT, GOOGL) and retail competitors (WMT). Affects tech indices (QQQ, SPY)."
+  - entity_type: "ORG"
+    entity_names:
+      - "Google"
+      - "Alphabet Inc"
+    assets:
+      - "GOOGL"
+      - "MSFT"
+      - "AMZN"
+      - "QQQ"
+      - "SPY"
+    description: "Direct impact on GOOGL stock. Sector impact on cloud and tech competitors (MSFT, AMZN). Affects tech indices (QQQ, SPY)."
+
+# =================================================
+# ENERGY - OIL & GAS MAJORS
+# =================================================
+mappings:
+  - entity_type: "ORG"
+    entity_names:
+      - "ExxonMobil"
+      - "Exxon"
+    assets:
+      - "XOM"
+      - "CVX"
+      - "BP"
+      - "SHEL"
+      - "XLE"
+      - "SPY"
+    description: "Direct impact on XOM stock. Sector impact on competitors (CVX, BP, SHEL). Affects energy sector ETF (XLE) and S&P 500 (SPY)."
+  - entity_type: "ORG"
+    entity_names:
+      - "Chevron"
+    assets:
+      - "CVX"
+      - "XOM"
+      - "BP"
+      - "SHEL"
+      - "XLE"
+      - "SPY"
+    description: "Direct impact on CVX stock. Sector impact on competitors (XOM, BP, SHEL). Affects energy sector ETF (XLE) and S&P 500 (SPY)."
+  - entity_type: "ORG"
+    entity_names:
+      - "Saudi Aramco"
+    assets:
+      - "2222.SR"
+      - "XOM"
+      - "CVX"
+      - "USO"
+      - "XLE"
+    description: "Direct impact on 2222.SR stock. Sector impact on global oil majors (XOM, CVX) and oil prices (USO). Affects energy sector ETF (XLE)."
+
+# =================================================
+# AUTOMOTIVE - EV & TRADITIONAL
+# =================================================
+mappings:
+  - entity_type: "ORG"
+    entity_names:
+      - "Tesla"
+    assets:
+      - "TSLA"
+      - "GM"
+      - "F"
+      - "RIVN"
+      - "NIO"
+      - "XLY"
+      - "SPY"
+    description: "Direct impact on TSLA stock. Sector impact on competitors (GM, F, RIVN, NIO). Affects consumer discretionary ETF (XLY) and S&P 500 (SPY)."
+  - entity_type: "ORG"
+    entity_names:
+      - "General Motors"
+      - "GM"
+    assets:
+      - "GM"
+      - "TSLA"
+      - "F"
+      - "RIVN"
+      - "XLY"
+      - "SPY"
+    description: "Direct impact on GM stock. Sector impact on competitors (TSLA, F, RIVN). Affects consumer discretionary ETF (XLY) and S&P 500 (SPY)."
+
+# =================================================
+# GLOBAL SHIPPING & LOGISTICS
+# =================================================
+mappings:
+  - entity_type: "ORG"
+    entity_names:
+      - "A.P. Moller - Maersk"
+      - "Maersk"
+    assets:
+      - "MAERSK-A.CO"
+      - "FDX"
+      - "UPS"
+      - "DHLGY"
+      - "IYT"
+      - "SPY"
+    description: "Direct impact on MAERSK-A.CO stock. Sector impact on competitors (FDX, UPS, DHLGY). Affects transportation ETF (IYT) and S&P 500 (SPY)."
+  - entity_type: "ORG"
+    entity_names:
+      - "FedEx"
+    assets:
+      - "FDX"
+      - "UPS"
+      - "MAERSK-A.CO"
+      - "DHLGY"
+      - "IYT"
+      - "SPY"
+    description: "Direct impact on FDX stock. Sector impact on competitors (UPS, MAERSK-A.CO, DHLGY). Affects transportation ETF (IYT) and S&P 500 (SPY)."
+
+# =================================================
+# MAJOR INDUSTRIAL CONGLOMERATES
+# =================================================
+mappings:
+  - entity_type: "ORG"
+    entity_names:
+      - "General Electric"
+      - "GE"
+    assets:
+      - "GE"
+      - "SIEGY"
+      - "HON"
+      - "MMM"
+      - "XLI"
+      - "SPY"
+    description: "Direct impact on GE stock. Sector impact on competitors (SIEGY, HON, MMM). Affects industrial sector ETF (XLI) and S&P 500 (SPY)."
+  - entity_type: "ORG"
+    entity_names:
+      - "Siemens"
+    assets:
+      - "SIEGY"
+      - "GE"
+      - "HON"
+      - "MMM"
+      - "XLI"
+      - "SPY"
+    description: "Direct impact on SIEGY stock. Sector impact on competitors (GE, HON, MMM). Affects industrial sector ETF (XLI) and S&P 500 (SPY)."
+
+# =================================================
+# CENTRAL BANK GOVERNORS
+# =================================================
+mappings:
+  - entity_type: "PERSON"
+    entity_names:
+      - "Jerome Powell"
+    assets:
+      - "EURUSD"
+      - "USDJPY"
+      - "GBPUSD"
+      - "TLT"
+      - "SPY"
+      - "QQQ"
+      - "GLD"
+    description: "As Fed Chair, Powell's statements impact USD through monetary policy signals, affecting FX pairs (EURUSD, USDJPY, GBPUSD), US bonds (TLT), US indices (SPY, QQQ), and gold (GLD)."
+  - entity_type: "PERSON"
+    entity_names:
+      - "Christine Lagarde"
+    assets:
+      - "EURUSD"
+      - "EURJPY"
+      - "EURGBP"
+      - "BUND"
+      - "STOXX50E"
+    description: "As ECB President, Lagarde's statements impact EUR, affecting FX pairs (EURUSD, EURJPY, EURGBP), European bonds (BUND), and indices (STOXX50E)."

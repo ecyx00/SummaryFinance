@@ -35,10 +35,21 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str
     GEMINI_MODEL_NAME: str = "" # Güvenli bir varsayılan
     SPRING_BOOT_SUBMIT_URL: str
+    FMP_API_KEY: str  # Financial Modeling Prep API key for economic calendar data
+    NEWSDATA_API_KEY: str  # NewsData.io API key for news fetching
+    FINNHUB_API_KEY: str   # Finnhub API key for additional news sources
     
     # Feature Extraction Models
     EMBEDDING_MODEL_NAME: str = "all-MiniLM-L6-v2"
     SPACY_MODEL_NAME: str = "en_core_web_sm"
+    
+    # Interaction Scorer Settings
+    SEMANTIC_SIMILARITY_WEIGHT: float = 0.50
+    ENTITY_SIMILARITY_WEIGHT: float = 0.30
+    TEMPORAL_PROXIMITY_WEIGHT: float = 0.20
+    TOP_K_NEAREST: int = 50  # Yakın komşu sayısı
+    INTERACTION_THRESHOLD: float = 0.65  # Graf kenarları için eşik değer
+    INTERACTION_SCORER_K_NEIGHBORS: int = 10
     
     @property
     def DATABASE_URL(self) -> str:

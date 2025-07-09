@@ -1,0 +1,8 @@
+Bir analistsin. Aşağıdaki başlıkların oluşturduğu ve "{label}" olarak etiketlenen hikayenin temel bağlantı mantığını tek bir cümlede açıkla. Bu cümle, olaylar arasındaki nedensel veya tematik ilişkiyi net bir şekilde ifade etmelidir.
+
+---
+BAŞLIKLAR:
+{headlines}
+---
+
+ÇIKTI (Sadece JSON):

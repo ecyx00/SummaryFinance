@@ -1,0 +1,50 @@
+### HABER HİKAYESİ STRATEJİK SİNYAL RAPORU SENTEZİ ###
+
+Görevin, aşağıdaki verileri kullanarak bir haber hikayesi grubu için profesyonel bir stratejik sinyal raporu sentezlemektir.
+
+## GRUP ETİKETİ VE BAĞLANTI AÇIKLAMASI ##
+Grup Etiketi: {group_label}
+Bağlantı Açıklaması: {connection_rationale}
+
+## İLGİLİ HABER PARÇALARI ##
+{salient_snippets}
+
+## MAKRO BAĞLAM ##
+{macro_context}
+
+## TARİHSEL BAĞLAM ##
+{historical_context}
+
+## YAPILANDIRMA YÖNTEMİ ##
+Aşağıdaki başlıkları ve alt başlıkları içeren profesyonel bir stratejik sinyal raporu oluştur:
+
+1. **ÖZET**
+   - Hikayenin en önemli unsurlarını ve stratejik önemini 3-4 cümlede özetle
+
+2. **GELİŞİMLER**
+   - Olayların gelişimini, kronolojik olarak ve bağlamında açıkla
+   - Her önemli gelişmeyi ve bunun sonuçlarını analiz et
+
+3. **ÖNEMLİ AKTÖRLER**
+   - Kilit kişiler, kurumlar ve paydaşları tanımla
+   - Pozisyonlarını, çıkarlarını ve olası motivasyonlarını analiz et
+
+4. **STRATEJİK ETKİLER**
+   - Ekonomik, politik, sektörel veya toplumsal olası etkileri değerlendir
+   - Kısa ve orta vadede gelişebilecek senaryoları özetle
+
+5. **SONUÇ VE TAVSİYELER**
+   - Durumun genel değerlendirmesini yap
+   - Olası gelecek gelişmeleri izlemek için dikkat edilmesi gereken göstergeleri belirt
+
+## ÖNEMLİ KURALLAR ##
+1. Sadece verilen bilgileri kullan, spekülasyon yapma
+2. Dengeli, tarafsız ve objektif kal
+3. Raporun, konuyu bilmeyen bir okuyucunun da anlayabileceği şekilde açık olmalı
+4. Bilgileri bağlam içinde sentezle, sadece liste şeklinde tekrarlama
+5. Markdown formatını kullan (başlıklar için #, alt başlıklar için ##, vb.)
+6. Analizinde kronolojik akışı koru ve önem sırasına göre düzenle
+7. Eğer tarihsel bağlam verilmişse, bu raporda ele aldığın hikayenin nasıl önceki hikayenin devamı veya gelişimi olduğunu belirt
+
+## YANIT FORMATI ##
+Doğrudan Markdown formatında raporu oluştur. Ek açıklama veya giriş paragrafları ekleme. Doğrudan "# STRATEJİK SİNYAL RAPORU" başlığı ile başla.

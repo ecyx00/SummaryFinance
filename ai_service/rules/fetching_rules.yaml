@@ -1,0 +1,20 @@
+# fetching_rules.yaml
+finnhub:
+  market_news:
+    categories: ["general", "forex", "crypto", "merger"]
+
+newsdata:
+  category_queries:
+    - category: "business"
+      keywords: ["earnings", "merger", "IPO", "forecast", "acquisition"]
+    - category: "politics"
+      keywords: ["election", "policy", "regulation", "trade deal", "sanctions"]
+    - category: "technology"
+      keywords: ["AI", "semiconductor", "cybersecurity", "breakthrough"]
+    - category: "world"
+      keywords: ["conflict", "supply chain", "geopolitical", "crisis"]
+    - category: "top"
+      keywords: ["market", "economy", "breaking"]
+  
+  general_keyword_sweep:
+    keywords: ["stock market", "inflation", "GDP", "interest rate", "central bank"]

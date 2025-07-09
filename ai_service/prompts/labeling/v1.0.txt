@@ -1,0 +1,8 @@
+Bir finansal yayın editörüsün. Aşağıdaki haber başlıklarının oluşturduğu "gelişen hikaye" için, 4-8 kelimelik, ilgi çekici ve analitik bir etiket (`label`) oluştur.
+
+---
+BAŞLIKLAR:
+{headlines}
+---
+
+ÇIKTI (Sadece JSON):

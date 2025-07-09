@@ -1,0 +1,41 @@
+# GROUP_VALIDATION_V1.1
+
+Bir haber metinleri grubunun aynı hikayeye ait olup olmadığını değerlendirin.
+
+## GİRDİ
+
+Aşağıda bazı haber başlıkları ve bu haberlerde ortak olarak geçen varlıklar (kişiler, kurumlar, yerler, vs.) verilmiştir:
+
+### Haber Başlıkları:
+{headlines}
+
+### Ortak Varlıklar:
+{shared_entities}
+
+## GÖREV
+
+Yukarıdaki haber başlıklarını ve ortak varlıkları değerlendirerek, bu haberlerin aynı hikayeyi veya olayla ilgili bir gelişmeyi anlattığına karar verin.
+
+## ÇIKTI
+
+Değerlendirmenizi aşağıdaki formatta JSON olarak döndürün:
+
+```json
+{
+    "is_story": true|false,
+    "signal_strength": "strong|medium|weak",
+    "confidence_score": 0.0-1.0 arasında bir değer,
+    "reasoning": "Kararınızın kısa gerekçesi"
+}
+```
+
+Örnekler:
+1. "is_story": true - Bu haberler aynı hikaye/olayı anlatıyor
+2. "signal_strength": "strong" - Haberler arasında çok güçlü bir bağlantı var
+3. "confidence_score": 0.95 - Bu değerlendirmenizin güven skoru
+4. "reasoning": "Haberlerin tümü X olayının farklı yönlerini ele alıyor..."
+
+Notlar:
+- Haberlerin alakasız olduğunu düşünüyorsanız "is_story" değerini false olarak ayarlayın
+- "signal_strength" değerini bağlantının gücüne göre "strong", "medium" veya "weak" olarak belirleyin
+- "confidence_score" değerini 0.0 ile 1.0 arasında, kararınızdaki güven düzeyinizi yansıtacak şekilde ayarlayın

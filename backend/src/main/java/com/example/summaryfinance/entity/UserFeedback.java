@@ -35,6 +35,9 @@ public class UserFeedback {
     @Column(name = "is_helpful")
     private Boolean isHelpful;
     
+    @Column(name = "comment", columnDefinition = "TEXT")
+    private String comment;
+    
     @Column(name = "feedback_timestamp", nullable = false)
     private ZonedDateTime feedbackTimestamp;
     

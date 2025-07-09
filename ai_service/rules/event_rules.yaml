@@ -1,0 +1,221 @@
+#```yaml
+# =================================================
+# PARA POLİTİKASI VE MERKEZ BANKACILIĞI
+# =================================================
+events:
+  - event_type: "RATE_DECISION"
+    description: "Başlıca merkez bankalarının resmi faiz oranı kararları ve para politikası açıklamaları."
+    priority: 1
+    rationale: "Döviz değerlemesi ve risksiz oranların en doğrudan belirleyicisi. Tüm varlık sınıflarında sistemik yeniden fiyatlandırmaya neden olur."
+    keywords:
+      - "faiz oranı kararı"
+      - "para politikası"
+      - "politika oranı"
+      - "faiz artırımı"
+      - "faiz indirimi"
+      - "şahin"
+      - "güvercin"
+      - "baz puan"
+    entities:
+      ORG: ["Federal Reserve", "Fed", "FOMC", "ECB", "Avrupa Merkez Bankası", "Bank of England", "BoE", "Japonya Merkez Bankası", "BoJ", "Çin Halk Bankası", "PBOC"]
+
+  - event_type: "CENTRAL_BANKER_SPEECH"
+    description: "Başlıca merkez bankası yöneticilerinin konuşmaları, ifadeleri ve basın toplantıları."
+    priority: 2
+    rationale: "İleriye dönük rehberlik sağlar ve gelecekteki politika değişikliklerini işaret eder. Piyasa oynaklığı genellikle kullanılan ton ve ifadelerden kaynaklanır."
+    keywords: ["konuşma", "ifade", "basın toplantısı", "açıklamalar", "tutanaklar"]
+    entities:
+      PERSON: ["Jerome Powell", "Christine Lagarde", "Andrew Bailey", "Kazuo Ueda"]
+      ORG: ["Federal Reserve", "ECB", "Bank of England", "Japonya Merkez Bankası"]
+
+  - event_type: "CENTRAL_BANK_MINUTES"
+    description: "Merkez bankası toplantı tutanaklarının yayımlanması, politika tartışmalarına dair içgörü sağlar."
+    priority: 3
+    rationale: "Merkez bankasının düşünce yapısını detaylandırır ve piyasa beklentilerini etkileyebilir."
+    keywords: ["tutanaklar", "toplantı tutanakları", "politika toplantısı"]
+    entities:
+      ORG: ["Federal Reserve", "FOMC", "ECB", "Bank of England", "BoJ"]
+
+# =================================================
+# ANA MAKROEKONOMİK GÖSTERGELER
+# =================================================
+  - event_type: "INFLATION_DATA"
+    description: "Tüketici Fiyat Endeksi (CPI) ve Üretici Fiyat Endeksi (PPI) gibi temel enflasyon verilerinin yayımlanması."
+    priority: 2
+    rationale: "Merkez bankası politikaları için birincil veri. Tahminlerden sapmalar, faiz oranı beklentilerini ve tahvil getirilerini doğrudan etkiler."
+    keywords: ["cpi", "enflasyon", "tüketici fiyatları", "ppi", "üretici fiyatları", "çekirdek enflasyon"]
+    entities:
+      GPE: ["Amerika Birleşik Devletleri", "Avro Bölgesi", "Birleşik Krallık", "Almanya", "Japonya", "Çin"]
+
+  - event_type: "EMPLOYMENT_DATA"
+    description: "Tarım Dışı İstihdam (NFP) ve işsizlik oranları gibi büyük istihdam raporlarının yayımlanması."
+    priority: 2
+    rationale: "Ekonominin sağlığını yansıtır ve Fed gibi merkez bankalarının çifte görevinde önemli bir rol oynar. Güçlü/zayıf veriler, politika beklentilerini etkiler."
+    keywords: ["tarım dışı istihdam", "nfp", "işsizlik oranı", "işsizlik başvuruları", "işgücü piyasası"]
+    entities:
+      GPE: ["Amerika Birleşik Devletleri", "Avro Bölgesi", "Birleşik Krallık", "Almanya"]
+
+  - event_type: "GDP_DATA"
+    description: "Gayrisafi Yurtiçi Hasıla (GSYİH) verilerinin yayımlanması, ekonomik büyümeyi gösterir."
+    priority: 3
+    rationale: "Ekonominin sağlığının en geniş ölçüsü. Önemli revizyonlar veya trendden sapmalar, uzun vadeli piyasa duyarlılığını ve para birimi gücünü etkiler."
+    keywords: ["gsyih", "gayrisafi yurtiçi hasıla", "ekonomik büyüme", "çeyreklik", "yıllık"]
+    entities:
+      GPE: ["Amerika Birleşik Devletleri", "Avro Bölgesi", "Birleşik Krallık", "Almanya", "Japonya", "Çin"]
+
+  - event_type: "RETAIL_SALES_DATA"
+    description: "Tüketici harcamalarını gösteren perakende satış verilerinin yayımlanması."
+    priority: 3
+    rationale: "Tüketici harcamaları GSYİH’nin ana bileşenidir. Değişiklikler ekonomik ivme değişimlerini işaret edebilir."
+    keywords: ["perakende satışlar", "tüketici harcamaları", "satış büyümesi"]
+    entities:
+      GPE: ["Amerika Birleşik Devletleri", "Avro Bölgesi", "Birleşik Krallık", "Japonya", "Çin"]
+
+  - event_type: "INDUSTRIAL_PRODUCTION_DATA"
+    description: "İmalat, madencilik ve kamu hizmetleri üretimini ölçen endüstriyel üretim endeksi verilerinin yayımlanması."
+    priority: 4
+    rationale: "Sanayi sektörünün sağlığını gösterir, genel ekonomi için öncü bir göstergedir."
+    keywords: ["endüstriyel üretim", "imalat çıktısı", "kapasite kullanımı"]
+    entities:
+      GPE: ["Amerika Birleşik Devletleri", "Avro Bölgesi", "Birleşik Krallık", "Almanya", "Japonya", "Çin"]
+
+  - event_type: "HOUSING_DATA"
+    description: "Konut başlangıçları, yapı izinleri ve ev satışları gibi konut piyasası verilerinin yayımlanması."
+    priority: 4
+    rationale: "Konut piyasası ekonomik aktivitenin önemli bir itici gücüdür ve tüketici güvenini ve harcamalarını etkileyebilir."
+    keywords: ["konut başlangıçları", "yapı izinleri", "yeni ev satışları", "mevcut ev satışları"]
+    entities:
+      GPE: ["Amerika Birleşik Devletleri", "Birleşik Krallık", "Kanada", "Avustralya"]
+
+  - event_type: "TRADE_BALANCE_DATA"
+    description: "İhracat ve ithalat arasındaki farkı gösteren ticaret dengesi verilerinin yayımlanması."
+    priority: 4
+    rationale: "Para birimi değerlemelerini etkiler ve bir ülkenin ekonomisinin rekabet gücünü gösterir."
+    keywords: ["ticaret dengesi", "ihracat", "ithalat", "cari hesap"]
+    entities:
+      GPE: ["Amerika Birleşik Devletleri", "Avro Bölgesi", "Birleşik Krallık", "Japonya", "Çin", "Almanya"]
+
+  - event_type: "CONSUMER_CONFIDENCE_DATA"
+    description: "Tüketici duyarlılığını yansıtan tüketici güven endekslerinin yayımlanması."
+    priority: 4
+    rationale: "Tüketici duyarlılığı, gelecekteki harcamaları ve ekonomik aktiviteyi tahmin edebilir."
+    keywords: ["tüketici güveni", "tüketici duyarlılığı", "michigan endeksi"]
+    entities:
+      GPE: ["Amerika Birleşik Devletleri", "Avro Bölgesi", "Birleşik Krallık", "Japonya"]
+
+  - event_type: "PMI_DATA"
+    description: "Ekonomik sağlığın öncü göstergesi olan Satın Alma Yöneticileri Endeksi (PMI) verilerinin yayımlanması."
+    priority: 4
+    rationale: "İmalat ve hizmet sektörlerinin zamanında bir görünümünü sağlar. 50’nin üzerinde okuma genişleme, altında daralma gösterir."
+    keywords: ["pmi", "satın alma yöneticileri", "ism imalat", "ism hizmetler"]
+    entities:
+      GPE: ["Amerika Birleşik Devletleri", "Avro Bölgesi", "Birleşik Krallık", "Almanya", "Japonya", "Çin"]
+
+# =================================================
+# JEOPOLİTİK OLAYLAR
+# =================================================
+  - event_type: "GEOPOLITICAL_TENSION"
+    description: "Askeri çatışmalar, yaptırımlar ve önemli siyasi istikrarsızlıklar dahil büyük jeopolitik olaylar."
+    priority: 3
+    rationale: "Riskten kaçınma duyarlılığını tetikler, USD, JPY ve altın gibi güvenli liman varlıklarına akışa yol açar. Tedarik zinciri kesintilerine neden olabilir."
+    keywords: ["yaptırımlar", "jeopolitik", "askeri çatışma", "ticaret savaşı", "gerilim artışı"]
+    entities:
+      GPE: ["Rusya", "Çin", "Amerika Birleşik Devletleri", "İran", "Kuzey Kore", "Tayvan"]
+
+  - event_type: "ENERGY_MARKET_SHOCK"
+    description: "OPEC kararları veya büyük arz kesintileri gibi küresel enerji arzını doğrudan etkileyen olaylar."
+    priority: 3
+    rationale: "Enflasyon, kurumsal maliyetler ve enerji ihracatçısı/ithalatçısı ülkelerin ekonomilerini doğrudan etkiler. Petrol fiyatlarını (WTI, Brent) ve enerji hisselerini etkiler."
+    keywords: ["opec", "opec+", "ham petrol stokları", "arz kesintisi", "üretim artışı"]
+    entities:
+      ORG: ["OPEC", "Uluslararası Enerji Ajansı", "IEA"]
+      GPE: ["Suudi Arabistan", "Rusya", "İran"]
+
+  - event_type: "MAJOR_ELECTIONS"
+    description: "Büyük ekonomilerde politika değişikliklerine yol açabilecek seçimler."
+    priority: 3
+    rationale: "Seçim sonuçları mali, para veya ticaret politikalarında değişikliklere yol açabilir, piyasa duyarlılığını ve varlık fiyatlarını etkiler."
+    keywords: ["seçim", "cumhurbaşkanlığı seçimi", "parlamento seçimi", "oy", "anketler"]
+    entities:
+      GPE: ["Amerika Birleşik Devletleri", "Almanya", "Fransa", "Birleşik Krallık", "Japonya", "Çin"]
+
+  - event_type: "TRADE_POLICY_CHANGES"
+    description: "Yeni ticaret anlaşmaları, tarifeler veya ticaret anlaşmazlıklarının duyurulması."
+    priority: 3
+    rationale: "Ticaret politikaları uluslararası ticaret akışlarını, kurumsal kârları ve ekonomik büyümeyi etkiler, döviz ve hisse senedi piyasalarını etkiler."
+    keywords: ["ticaret anlaşması", "tarife", "ticaret savaşı", "ithalat vergisi", "ihracat kısıtlaması"]
+    entities:
+      GPE: ["Amerika Birleşik Devletleri", "Çin", "Avrupa Birliği", "Kanada", "Meksika"]
+
+  - event_type: "SANCTIONS_ANNOUNCEMENT"
+    description: "Ülkelere veya varlıklara ekonomik yaptırımların uygulanması veya kaldırılması."
+    priority: 3
+    rationale: "Yaptırımlar ticareti bozabilir, emtia fiyatlarını etkileyebilir ve jeopolitik gerilimlere yol açabilir, küresel piyasaları etkiler."
+    keywords: ["yaptırımlar", "ambargo", "kısıtlayıcı önlemler", "cezalar"]
+    entities:
+      GPE: ["Rusya", "İran", "Kuzey Kore", "Venezuela"]
+
+# =================================================
+# MALİYE POLİTİKASI
+# =================================================
+  - event_type: "GOVERNMENT_BUDGET"
+    description: "Harcama ve vergilendirme planlarını içeren hükümet bütçe planlarının yayımlanması."
+    priority: 3
+    rationale: "Bütçeler maliye politikasını belirler, ekonomiyi canlandırabilir veya daraltabilir, büyüme ve enflasyon beklentilerini etkiler."
+    keywords: ["bütçe", "mali plan", "hükümet harcamaları", "vergilendirme", "açık", "fazla"]
+    entities:
+      GPE: ["Amerika Birleşik Devletleri", "Avro Bölgesi ülkeleri", "Birleşik Krallık", "Japonya", "Çin"]
+
+  - event_type: "TAX_POLICY"
+    description: "Vergi oranları veya vergi yasalarında değişikliklerin duyurulması."
+    priority: 3
+    rationale: "Vergi değişiklikleri kurumsal kârları, tüketici harcamalarını ve yatırımları etkileyebilir, hisse senedi ve tahvil piyasalarını etkiler."
+    keywords: ["vergi indirimi", "vergi artışı", "vergi reformu", "maliye politikası"]
+    entities:
+      GPE: ["Amerika Birleşik Devletleri", "Avro Bölgesi ülkeleri", "Birleşik Krallık"]
+
+  - event_type: "STIMULUS_PACKAGE"
+    description: "Harcama programları veya maddi transferler gibi ekonomik teşvik önlemlerinin duyurulması."
+    priority: 2
+    rationale: "Teşvik paketleri ekonomik aktiviteyi ve piyasa duyarlılığını artırabilir, özellikle resesyon dönemlerinde."
+    keywords: ["teşvik", "yardım paketi", "ekonomik destek", "mali teşvik"]
+    entities:
+      GPE: ["Amerika Birleşik Devletleri", "Avro Bölgesi", "Çin", "Japonya"]
+
+  - event_type: "DEBT_CEILING"
+    description: "Borç tavanıyla ilgili tartışmalar ve kararlar, özellikle ABD’de."
+    priority: 3
+    rationale: "Borç tavanının yükseltilmemesi hükümet kapanmalarına veya temerrüt risklerine yol açabilir, piyasa oynaklığına neden olur."
+    keywords: ["borç tavanı", "hükümet kapanması", "temerrüt riski"]
+    entities:
+      GPE: ["Amerika Birleşik Devletleri"]
+
+# =================================================
+# KURUMSAL OLAYLAR
+# =================================================
+  - event_type: "MAJOR_EARNINGS_REPORT"
+    description: "Büyük şirketlerin çeyreklik veya yıllık kazanç raporlarının yayımlanması."
+    priority: 4
+    rationale: "Büyük şirketlerin kazanç raporları, hisse senedi endekslerini ve sektör duyarlılığını etkileyebilir."
+    keywords: ["kazanç raporu", "çeyreklik kazanç", "kâr", "gelir", "eps"]
+    entities:
+      ORG: ["Apple", "Microsoft", "Amazon", "Google", "Tesla"]
+
+  - event_type: "M&A_ANNOUNCEMENT"
+    description: "Önemli birleşme ve satın alma anlaşmalarının duyurulması."
+    priority: 4
+    rationale: "Birleşme ve satın almalar sektör dinamiklerini ve hisse senedi fiyatlarını etkileyebilir, endeks hareketlerine yol açabilir."
+    keywords: ["birleşme", "satın alma", "m&a", "anlaşma"]
+    entities:
+      ORG: ["Apple", "Microsoft", "Amazon", "Google"]
+
+# =================================================
+# PİYASA YAPISAL OLAYLARI
+# =================================================
+  - event_type: "MARKET_DISRUPTION"
+    description: "Borsaların kapanması veya ticaretin durdurulması gibi piyasa işleyişini etkileyen olaylar."
+    priority: 3
+    rationale: "Piyasa likiditesini ve yatırımcı güvenini etkileyebilir, oynaklığa neden olabilir."
+    keywords: ["borsa kapanışı", "ticaret durdurma", "devre kesici", "teknik arıza"]
+    entities:
+      ORG: ["NYSE", "Nasdaq", "LSE", "Tokyo Borsası"]

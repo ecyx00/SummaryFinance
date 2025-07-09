@@ -1,0 +1,36 @@
+### HABER HİKAYESİ HAFIZA BİLEŞENLERİ OLUŞTURMA ###
+
+Görevin, bir haber hikaye kümesi analizinden, hikayenin özünü, bağlam parçalarını ve özetini çıkarmaktır.
+
+## HABER HİKAYE ANALİZİ ##
+{analysis_summary}
+
+## DEĞERLENDİRME YÖNTEMİ ##
+1. Verilen analiz metnini dikkatlice oku ve anla.
+2. Metinden şu üç unsuru çıkar:
+   - Hikayenin özü: Olayın/durumun en temel ve ayırt edici özellikleri nelerdir? (1-2 cümle)
+   - Bağlam parçaları: Hikayeyi anlamak için gerekli anahtar noktalar, isimler, tarihler, yerler, olaylar (3-5 madde)
+   - Sürekli özet: Hikayenin gelecekte referans olacak şekilde kompakt özeti (maksimum 100 kelime)
+
+## YANIT FORMATI ##
+Yanıtını kesinlikle aşağıdaki JSON formatında ver:
+
+```json
+{
+  "rolling_summary": "Hikayenin sürekli özeti - gelecekteki hikaye takibi için önemli",
+  "story_essence": "Hikayenin özü - 1-2 cümlelik temel tanımı",
+  "context_snippets": [
+    "Anahtar nokta 1",
+    "Anahtar nokta 2",
+    "Anahtar nokta 3",
+    "Anahtar nokta 4",
+    "Anahtar nokta 5"
+  ]
+}
+```
+
+ÖNEMLİ:
+1. "rolling_summary" alanı 100 kelimeyi geçmemelidir
+2. "story_essence" alanı 1-2 cümle olmalıdır
+3. "context_snippets" alanı 3-5 madde içermelidir, her biri kısa ve öz olmalı
+4. Yanıtını YALNIZCA istenen JSON formatında ver. Başka açıklama veya metin ekleme.
