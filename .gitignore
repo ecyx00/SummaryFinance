@@ -21,6 +21,29 @@ build/
 .vscode/
 
 # NetBeans
+# Build output
+target/
+build/
+!**/src/main/**/target/
+!**/src/test/**/target/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# IDE dosyaları
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+.idea
+*.iws
+*.iml
+*.ipr
+.vscode/
+
+# NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
@@ -107,3 +130,9 @@ gcloud.json
 *invoice*
 *receipt*
 *personal*
+
+# Ignore docs directory and markdown files (keep root README.md and HELP.md)
+docs/
+*.md
+!README.md
+!HELP.md
